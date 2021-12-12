@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 900px) {
+  .App {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.SaturationBrightnessPlot-svg {
+  margin: 16px 0;
+  min-width: 256px;
+  max-width: 512px;
+}
