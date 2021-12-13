@@ -1,51 +1,149 @@
-import { useState } from "react";
+import { useState, useRef, SVGAttributes } from "react";
+import { useDrag, DndProvider, useDrop } from "react-dnd";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import { ChromePicker } from "react-color";
 
-import "./App.css";
 import { hex2Rgb, HSV2RGB, HSV2String, rgb2Hex, rgb2hsv } from "./utils";
+import "./App.css";
 
 interface SVColor {
   s: number;
   v: number;
 }
 
+const DraggableCircle = ({
+  x,
+  y,
+  ...restProps
+}: {
+  x: number;
+  y: number;
+  // isDragging?: boolean;
+} & SVGAttributes<SVGCircleElement>) => {
+  return <circle {...restProps} cx={x} cy={y} r={1} fill="red" />;
+};
+
 const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [indexDragging, setIndexDragging] = useState(-1);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [rect, setRect] = useState({ x: 0, y: 0 });
+
   const tens = [10, 20, 30, 40, 50, 60, 70, 80, 90];
   const horizontalLines = tens.map((t) => (
-    <line x1={t} y1={0} x2={t} y2={100} stroke="#d2e9f7" strokeWidth={0.5} />
+    <line
+      key={"h" + t}
+      x1={t}
+      y1={0}
+      x2={t}
+      y2={100}
+      stroke="#d2e9f7"
+      strokeWidth={0.5}
+    />
   ));
   const verticalLines = tens.map((t) => (
-    <line x1={0} y1={t} x2={100} y2={t} stroke="#d2e9f7" strokeWidth={0.5} />
+    <line
+      key={"v" + t}
+      x1={0}
+      y1={t}
+      x2={100}
+      y2={t}
+      stroke="#d2e9f7"
+      strokeWidth={0.5}
+    />
   ));
 
-  return (
-    <svg className="SaturationBrightnessPlot-svg" viewBox="0 0 100 100">
-      <g name="grid lines">
-        {horizontalLines}
-        {verticalLines}
-        <text x={2} y={2} style={{ fontSize: 2 }}>
-          Saturation
-        </text>
-        <text x={95} y={2} style={{ fontSize: 2 }}>
-          100
-        </text>
-        <text
-          x={6}
-          y={2}
-          transform="rotate(-90, 10,10)"
-          style={{ fontSize: 2 }}
-        >
-          Brightness
-        </text>
-        <text x={0} y={99} style={{ fontSize: 2 }}>
-          0
-        </text>
-      </g>
+  const startDrag = (event, draggedElem, index) => {
+    event.preventDefault();
+    let point = svgRef.current.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    point = point.matrixTransform(svgRef.current.getScreenCTM().inverse());
+    setDragOffset({
+      x: point.x - rect.x,
+      y: point.y - rect.y,
+    });
+    setIndexDragging(index);
 
-      {colors.map(({ s, v }) => (
-        <circle key={`s${s}v${v}}`} cx={s} cy={100 - v} r={1} fill="red" />
-      ))}
-    </svg>
+    const mousemove = (event) => {
+      event.preventDefault();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      let cursor = point.matrixTransform(
+        svgRef.current.getScreenCTM().inverse()
+      );
+      setRect({
+        x: cursor.x - dragOffset.x,
+        y: cursor.y - dragOffset.y,
+      });
+    };
+
+    const mouseup = (event) => {
+      setIndexDragging(-1);
+      document.removeEventListener("mousemove", mousemove);
+      document.removeEventListener("mouseup", mouseup);
+    };
+
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
+  };
+
+  return (
+    <div>
+      <svg
+        ref={svgRef}
+        className="SaturationBrightnessPlot-svg"
+        viewBox="0 0 100 100"
+      >
+        <g name="grid lines">
+          {horizontalLines}
+          {verticalLines}
+          <text x={2} y={2} style={{ fontSize: 2 }}>
+            Saturation
+          </text>
+          <text x={95} y={2} style={{ fontSize: 2 }}>
+            100
+          </text>
+          <text
+            x={6}
+            y={2}
+            transform="rotate(-90, 10,10)"
+            style={{ fontSize: 2 }}
+          >
+            Brightness
+          </text>
+          <text x={0} y={99} style={{ fontSize: 2 }}>
+            0
+          </text>
+        </g>
+
+        {colors.map(({ s, v }, i) => {
+          console.log(indexDragging, rect);
+          return (
+            <DraggableCircle
+              key={`s${s}v${v}}`}
+              x={s + (indexDragging === i ? rect.x : 0)} // + indexDragging === i ? rect.x : 0
+              y={100 - v + (indexDragging === i ? rect.y : 0)} // + indexDragging === i ? rect.y : 0
+              onMouseDown={(e) => startDrag(e, svgRef, i)}
+            />
+          );
+        })}
+      </svg>
+      <div>
+        Position: <br />
+        X: {rect.x}
+        <br />
+        Y: {rect.y}
+        <br />
+        dragOffset X: {dragOffset.x}
+        <br />
+        dragOffset Y: {dragOffset.y}
+        <br />
+        indexDragging: {indexDragging}
+      </div>
+    </div>
   );
 };
 
@@ -65,7 +163,7 @@ const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
         </select>
       </label>
       {hexCodes?.map((c) => (
-        <ColorDisplay colorHex={c} showMode={showMode} />
+        <ColorDisplay key={c} colorHex={c} showMode={showMode} />
       ))}
     </div>
   );
@@ -149,7 +247,7 @@ const SuggestColorWithHue = () => {
                 const colorHex = rgb2Hex(
                   HSV2RGB({ h: hue / 360, s: s / 100, v: b / 100 })
                 );
-                return <ColorDisplay colorHex={colorHex} />;
+                return <ColorDisplay key={colorHex} colorHex={colorHex} />;
               })
             : null}
         </div>
@@ -175,6 +273,35 @@ const ColorPicker = () => {
     </div>
   );
 };
+
+function Box() {
+  const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+    // "type" is required. It is used by the "accept" specification of drop targets.
+    type: "BOX",
+    // The collect function utilizes a "monitor" instance (see the Overview for what this is)
+    // to pull important pieces of state from the DnD system.
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+  console.log("Draggable Box", { isDragging });
+
+  return (
+    <div ref={dragPreview}>
+      {/* The drag ref marks this node as being the "pick-up" node */}
+      <div
+        role="Handle"
+        ref={drag}
+        style={{
+          border: "1px solid black",
+          opacity: isDragging ? 0.5 : 1,
+          width: 64,
+          height: 64,
+        }}
+      />
+    </div>
+  );
+}
 
 function App() {
   return (
