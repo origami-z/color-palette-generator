@@ -16,6 +16,10 @@ export function hex2Rgb(hex: string) {
   } : null;
 }
 
+export interface HSVValue {
+  h: number, s: number, v: number
+}
+
 
 /** rgb: 0-255 */
 export function rgb2hsv({ r, g, b }: { r: number, g: number, b: number }) {
@@ -56,7 +60,7 @@ export function rgb2hsv({ r, g, b }: { r: number, g: number, b: number }) {
 }
 
 /** 0 <= h, s, v <= 1 */
-export function HSV2RGB({ h, s, v }: { h: number, s: number, v: number }) {
+export function HSV2RGB({ h, s, v }: HSVValue) {
   var r, g, b, i, f, p, q, t;
   i = Math.floor(h * 6);
   f = h * 6 - i;
@@ -76,4 +80,8 @@ export function HSV2RGB({ h, s, v }: { h: number, s: number, v: number }) {
     g: Math.round(g * 255),
     b: Math.round(b * 255)
   };
+}
+
+export function HSV2String({ h, s, v }: HSVValue) {
+  return `HSV(${h},${s}, ${v})`
 }

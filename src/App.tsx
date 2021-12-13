@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChromePicker } from "react-color";
 
 import "./App.css";
-import { hex2Rgb, HSV2RGB, rgb2Hex, rgb2hsv } from "./utils";
+import { hex2Rgb, HSV2RGB, HSV2String, rgb2Hex, rgb2hsv } from "./utils";
 
 interface SVColor {
   s: number;
@@ -49,23 +49,72 @@ const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
   );
 };
 
+const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
+  const [showMode, setShowMode] = useState("Hex");
+  return (
+    <div>
+      <label>
+        Show as:
+        <select
+          name="color mode"
+          value={showMode}
+          onChange={(e) => setShowMode(e.currentTarget.value)}
+        >
+          <option value="Hex">Hex</option>
+          <option value="HSV">HSV</option>
+        </select>
+      </label>
+      {hexCodes?.map((c) => (
+        <ColorDisplay colorHex={c} showMode={showMode} />
+      ))}
+    </div>
+  );
+};
+
+const ColorDisplay = ({
+  colorHex,
+  showMode,
+}: {
+  colorHex: string;
+  showMode?: string;
+}) => {
+  // .map(hex2Rgb).map(rgb2hsv))
+  let displayColorText = colorHex.toUpperCase();
+  if (showMode === "HSV") {
+    displayColorText = HSV2String(rgb2hsv(hex2Rgb(colorHex)));
+  }
+  return (
+    <div className="ColorsDisplay-row">
+      <div className="ColorsDisplay-colorCode">{displayColorText}</div>
+      <div
+        className="ColorsDisplay-colorBlock"
+        style={{ background: colorHex }}
+      />
+    </div>
+  );
+};
+
 const InputWithSVPlot = () => {
   const [colorInput, setColorInput] = useState("#f2e6e6");
   const hexCodes = colorInput.match(/\#[a-f0-9]{6}/gi);
   return (
-    <div>
+    <>
       <div>
-        <label>
-          Hex values:
-          <textarea
-            value={colorInput}
-            onChange={(e) => setColorInput(e.currentTarget.value)}
-          ></textarea>
-        </label>
+        <div>
+          <label>
+            Hex values:
+            <textarea
+              value={colorInput}
+              onChange={(e) => setColorInput(e.currentTarget.value)}
+            ></textarea>
+          </label>
+        </div>
+        <SaturationBrightnessPlot
+          colors={hexCodes?.map(hex2Rgb).map(rgb2hsv)}
+        />
       </div>
-      <SaturationBrightnessPlot colors={hexCodes?.map(hex2Rgb).map(rgb2hsv)} />
-      {JSON.stringify(hexCodes?.map(hex2Rgb).map(rgb2hsv))}
-    </div>
+      <ColorsDisplay hexCodes={hexCodes} />
+    </>
   );
 };
 
@@ -94,26 +143,25 @@ const SuggestColorWithHue = () => {
       </label>
       <div>
         <h3>Hue: {hue}</h3>
-        {!Number.isNaN(hue)
-          ? saturationBrightnessPairs.map(([s, b]) => {
-              return (
-                <div>
-                  {rgb2Hex(HSV2RGB({ h: hue / 360, s: s / 100, v: b / 100 }))}
-                </div>
-              );
-            })
-          : null}
+        <div className="">
+          {!Number.isNaN(hue)
+            ? saturationBrightnessPairs.map(([s, b]) => {
+                const colorHex = rgb2Hex(
+                  HSV2RGB({ h: hue / 360, s: s / 100, v: b / 100 })
+                );
+                return <ColorDisplay colorHex={colorHex} />;
+              })
+            : null}
+        </div>
       </div>
     </div>
   );
 };
 
-function App() {
+const ColorPicker = () => {
   const [hex, setHex] = useState("#abcdef");
   return (
-    <div className="App">
-      <InputWithSVPlot />
-      <SuggestColorWithHue />
+    <div className="ColorPicker">
       <label>
         HEX:
         <input
@@ -124,6 +172,16 @@ function App() {
         />
       </label>
       <ChromePicker color={hex} onChange={(e) => setHex(e.hex)} />
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <InputWithSVPlot />
+      <SuggestColorWithHue />
+      <ColorPicker />
     </div>
   );
 }
