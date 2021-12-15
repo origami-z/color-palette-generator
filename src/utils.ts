@@ -45,6 +45,8 @@ export function rgb2hsv({ r, g, b }: { r: number, g: number, b: number }) {
       h = (1 / 3) + rr - bb;
     } else if (babs === v) {
       h = (2 / 3) + gg - rr;
+    } else {
+      h = 0
     }
     if (h < 0) {
       h += 1;
@@ -59,8 +61,22 @@ export function rgb2hsv({ r, g, b }: { r: number, g: number, b: number }) {
   };
 }
 
+/**  normalize h, s, v to 0 <= n <= 1 */
+export function normalizeHSV({ h, s, v }: HSVValue) {
+  return { h: h / 360, s: s / 100, v: v / 100 }
+}
+
 /** 0 <= h, s, v <= 1 */
 export function HSV2RGB({ h, s, v }: HSVValue) {
+  if (h < 0 || h > 1) {
+    console.error("HSV2RGB invalid 0 <= h <= 1", h)
+  }
+  if (s < 0 || s > 1) {
+    console.error("HSV2RGB invalid 0 <= s <= 1", s)
+  }
+  if (v < 0 || v > 1) {
+    console.error("HSV2RGB invalid 0 <= v <= 1", v)
+  }
   var r, g, b, i, f, p, q, t;
   i = Math.floor(h * 6);
   f = h * 6 - i;
@@ -74,6 +90,7 @@ export function HSV2RGB({ h, s, v }: HSVValue) {
     case 3: r = p, g = q, b = v; break;
     case 4: r = t, g = p, b = v; break;
     case 5: r = v, g = p, b = q; break;
+    default: r = g = b = 0; // Avoid TS error
   }
   return {
     r: Math.round(r * 255),

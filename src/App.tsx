@@ -1,14 +1,19 @@
-import { useState, useRef, SVGAttributes } from "react";
-import { useDrag, DndProvider, useDrop } from "react-dnd";
-import { TouchBackend } from "react-dnd-touch-backend";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useState, useRef, SVGAttributes, useCallback } from "react";
 
 import { ChromePicker } from "react-color";
 
-import { hex2Rgb, HSV2RGB, HSV2String, rgb2Hex, rgb2hsv } from "./utils";
+import {
+  hex2Rgb,
+  HSV2RGB,
+  HSV2String,
+  normalizeHSV,
+  rgb2Hex,
+  rgb2hsv,
+} from "./utils";
 import "./App.css";
 
-interface SVColor {
+interface HSVColor {
+  h: number;
   s: number;
   v: number;
 }
@@ -25,11 +30,21 @@ const DraggableCircle = ({
   return <circle {...restProps} cx={x} cy={y} r={1} fill="red" />;
 };
 
-const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
+const SaturationBrightnessPlot = ({
+  colors = [],
+  updateColorAtIndex,
+}: {
+  colors?: HSVColor[];
+  updateColorAtIndex?: (color: HSVColor, index: number) => void;
+}) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [indexDragging, setIndexDragging] = useState(-1);
+  const indexDraggingRef = useRef(-1);
+  // const [indexDragging, setIndexDragging] = useState(-1);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  // Need `rect` so that SVG would re-render during `mousemove`
   const [rect, setRect] = useState({ x: 0, y: 0 });
+  // Need ref so that `mousemove` can access latest value
+  const rectRef = useRef({ x: 0, y: 0 });
 
   const tens = [10, 20, 30, 40, 50, 60, 70, 80, 90];
   const horizontalLines = tens.map((t) => (
@@ -57,15 +72,27 @@ const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
 
   const startDrag = (event, draggedElem, index) => {
     event.preventDefault();
+    if (!svgRef.current) {
+      console.error("SVG Ref is null");
+      return;
+    }
     let point = svgRef.current.createSVGPoint();
     point.x = event.clientX;
     point.y = event.clientY;
     point = point.matrixTransform(svgRef.current.getScreenCTM().inverse());
+    console.log("start drag", { x: point.x, y: point.y });
     setDragOffset({
-      x: point.x - rect.x,
-      y: point.y - rect.y,
+      x: point.x - rectRef.current.x,
+      y: point.y - rectRef.current.y,
     });
-    setIndexDragging(index);
+    const newRect = {
+      x: point.x,
+      y: point.y,
+    };
+    setRect(newRect);
+    rectRef.current = newRect;
+    // setIndexDragging(index);
+    indexDraggingRef.current = index;
 
     const mousemove = (event) => {
       event.preventDefault();
@@ -74,14 +101,28 @@ const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
       let cursor = point.matrixTransform(
         svgRef.current.getScreenCTM().inverse()
       );
-      setRect({
+      const newRect = {
         x: cursor.x - dragOffset.x,
         y: cursor.y - dragOffset.y,
-      });
+      };
+      setRect(newRect);
+      rectRef.current = newRect;
     };
 
     const mouseup = (event) => {
-      setIndexDragging(-1);
+      const colorToUpdate = {
+        h: colors[indexDraggingRef.current].h,
+        s: rectRef.current.x,
+        v: 100 - rectRef.current.y,
+      };
+      updateColorAtIndex?.(
+        normalizeHSV(colorToUpdate),
+        indexDraggingRef.current
+      );
+      // setIndexDragging(-1);
+      indexDraggingRef.current = -1;
+      // setRect({ x: 0, y: 0 });
+      setDragOffset({ x: 0, y: 0 });
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     };
@@ -92,6 +133,12 @@ const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
 
   return (
     <div>
+      {/* <div>
+        <label>
+          First Hue
+          <input type="range" min="0" max="360" value={colors[0]?.h} />
+        </label>
+      </div> */}
       <svg
         ref={svgRef}
         className="SaturationBrightnessPlot-svg"
@@ -120,29 +167,18 @@ const SaturationBrightnessPlot = ({ colors = [] }: { colors?: SVColor[] }) => {
         </g>
 
         {colors.map(({ s, v }, i) => {
-          console.log(indexDragging, rect);
+          // console.log(indexDragging, rect);
+          const coord =
+            indexDraggingRef.current === i ? rect : { x: s, y: 100 - v };
           return (
             <DraggableCircle
               key={`s${s}v${v}}`}
-              x={s + (indexDragging === i ? rect.x : 0)} // + indexDragging === i ? rect.x : 0
-              y={100 - v + (indexDragging === i ? rect.y : 0)} // + indexDragging === i ? rect.y : 0
               onMouseDown={(e) => startDrag(e, svgRef, i)}
+              {...coord}
             />
           );
         })}
       </svg>
-      <div>
-        Position: <br />
-        X: {rect.x}
-        <br />
-        Y: {rect.y}
-        <br />
-        dragOffset X: {dragOffset.x}
-        <br />
-        dragOffset Y: {dragOffset.y}
-        <br />
-        indexDragging: {indexDragging}
-      </div>
     </div>
   );
 };
@@ -169,6 +205,7 @@ const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
   );
 };
 
+/** Renders a list of color */
 const ColorDisplay = ({
   colorHex,
   showMode,
@@ -193,8 +230,24 @@ const ColorDisplay = ({
 };
 
 const InputWithSVPlot = () => {
-  const [colorInput, setColorInput] = useState("#f2e6e6");
-  const hexCodes = colorInput.match(/\#[a-f0-9]{6}/gi);
+  const [hexCodes, setHexCodes] = useState(["#f2e6e6"]);
+  const updateColorAtIndex = useCallback(
+    (color: HSVColor, index: number) => {
+      console.log("updateColorAtIndex", color, index);
+      const newHexCodes = hexCodes?.map((h, i) => {
+        if (i === index) {
+          const newHex = rgb2Hex(HSV2RGB(color));
+          console.log({ newHex, RGB: HSV2RGB(color), color });
+          return newHex;
+        } else {
+          return h;
+        }
+      });
+      console.log({ newHexCodes });
+      setHexCodes(newHexCodes);
+    },
+    [hexCodes]
+  );
   return (
     <>
       <div>
@@ -202,13 +255,19 @@ const InputWithSVPlot = () => {
           <label>
             Hex values:
             <textarea
-              value={colorInput}
-              onChange={(e) => setColorInput(e.currentTarget.value)}
+              defaultValue="#f2e6e6"
+              // value={colorInput}
+              onChange={(e) =>
+                setHexCodes(
+                  e.currentTarget.value.match(/\#[a-f0-9]{6}/gi)?.slice() || []
+                )
+              }
             ></textarea>
           </label>
         </div>
         <SaturationBrightnessPlot
           colors={hexCodes?.map(hex2Rgb).map(rgb2hsv)}
+          updateColorAtIndex={updateColorAtIndex}
         />
       </div>
       <ColorsDisplay hexCodes={hexCodes} />
@@ -216,9 +275,8 @@ const InputWithSVPlot = () => {
   );
 };
 
-const SuggestColorWithHue = () => {
-  const [hue, setHue] = useState(0);
-  const saturationBrightnessPairs = [
+const saturationBrightnessTemplatePair = [
+  [
     [5, 95],
     [15, 97],
     [30, 98],
@@ -229,16 +287,52 @@ const SuggestColorWithHue = () => {
     [87, 42],
     [78, 25],
     [65, 12],
-  ];
+  ],
+  [
+    [4, 96],
+    [19, 92],
+    [38, 85],
+    [59, 75],
+    [75, 61],
+    [82, 49],
+    [78, 37],
+    [73, 26],
+    [65, 18],
+    [54, 10],
+  ],
+];
+
+const SuggestColorWithHue = () => {
+  const [hue, setHue] = useState(0);
+  const [templateIndex, setTemplateIndex] = useState(0);
+  const saturationBrightnessPairs =
+    saturationBrightnessTemplatePair[templateIndex];
   return (
     <div>
-      <label>
-        Select hue (0-360):
-        <input
-          type="number"
-          onChange={(e) => setHue(Number.parseInt(e.target.value))}
-        />
-      </label>
+      <div>
+        <label>
+          Generate from hue (0-360):
+          <input
+            type="number"
+            onChange={(e) => setHue(Number.parseInt(e.target.value))}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Template:
+          <select
+            value={templateIndex}
+            onChange={(e) =>
+              setTemplateIndex(Number.parseInt(e.currentTarget.value))
+            }
+          >
+            <option>0</option>
+            <option>1</option>
+            {/* <option>2</option> */}
+          </select>
+        </label>
+      </div>
       <div>
         <h3>Hue: {hue}</h3>
         <div className="">
