@@ -307,6 +307,16 @@ const SuggestColorWithHue = () => {
   const [templateIndex, setTemplateIndex] = useState(0);
   const saturationBrightnessPairs =
     saturationBrightnessTemplatePair[templateIndex];
+  const validHue = !Number.isNaN(hue);
+  const hexValues = validHue
+    ? saturationBrightnessPairs.map(([s, b]) => {
+        const colorHex = rgb2Hex(
+          HSV2RGB({ h: hue / 360, s: s / 100, v: b / 100 })
+        );
+        return colorHex;
+      })
+    : [];
+
   return (
     <div>
       <div>
@@ -335,16 +345,20 @@ const SuggestColorWithHue = () => {
       </div>
       <div>
         <h3>Hue: {hue}</h3>
-        <div className="">
-          {!Number.isNaN(hue)
-            ? saturationBrightnessPairs.map(([s, b]) => {
-                const colorHex = rgb2Hex(
-                  HSV2RGB({ h: hue / 360, s: s / 100, v: b / 100 })
-                );
-                return <ColorDisplay key={colorHex} colorHex={colorHex} />;
-              })
-            : null}
-        </div>
+        {validHue ? (
+          <div className="">
+            {hexValues.map((colorHex) => (
+              <ColorDisplay key={colorHex} colorHex={colorHex} />
+            ))}
+            <button
+              onClick={() =>
+                navigator.clipboard.writeText(hexValues.join("\n"))
+              }
+            >
+              copy
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
