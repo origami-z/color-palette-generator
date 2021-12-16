@@ -21,13 +21,23 @@ interface HSVColor {
 const DraggableCircle = ({
   x,
   y,
+  className,
   ...restProps
 }: {
   x: number;
   y: number;
   // isDragging?: boolean;
 } & SVGAttributes<SVGCircleElement>) => {
-  return <circle {...restProps} cx={x} cy={y} r={1} fill="red" />;
+  return (
+    <circle
+      {...restProps}
+      className={`SaturationBrightnessPlot-circle ${className || ""}`}
+      cx={x}
+      cy={y}
+      r={1}
+      fill="red"
+    />
+  );
 };
 
 const SaturationBrightnessPlot = ({

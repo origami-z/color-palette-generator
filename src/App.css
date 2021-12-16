@@ -18,6 +18,10 @@
   max-width: 512px;
 }
 
+.SaturationBrightnessPlot-circle:hover {
+  cursor: grab;
+}
+
 .ColorsDisplay-row {
   display: flex;
   justify-content: center;
