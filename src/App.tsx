@@ -40,12 +40,21 @@ const DraggableCircle = ({
   );
 };
 
-const SaturationBrightnessPlot = ({
-  colors = [],
-  updateColorAtIndex,
+interface XYCoord {
+  x: number;
+  y: number;
+}
+
+const Draggable2DSVGPlot = ({
+  xAxisLabel,
+  yAxisLabel,
+  coords = [],
+  updateCoordAtIndex,
 }: {
-  colors?: HSVColor[];
-  updateColorAtIndex?: (color: HSVColor, index: number) => void;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  coords?: XYCoord[];
+  updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
@@ -120,15 +129,14 @@ const SaturationBrightnessPlot = ({
     };
 
     const mouseup = (event) => {
-      const colorToUpdate = {
-        h: colors[indexDraggingRef.current].h,
-        s: rectRef.current.x,
-        v: 100 - rectRef.current.y,
-      };
-      updateColorAtIndex?.(
-        normalizeHSV(colorToUpdate),
+      updateCoordAtIndex?.(
+        {
+          x: rectRef.current.x,
+          y: rectRef.current.y,
+        },
         indexDraggingRef.current
       );
+      rectRef.current;
       // setIndexDragging(-1);
       indexDraggingRef.current = -1;
       // setRect({ x: 0, y: 0 });
@@ -143,12 +151,6 @@ const SaturationBrightnessPlot = ({
 
   return (
     <div>
-      {/* <div>
-        <label>
-          First Hue
-          <input type="range" min="0" max="360" value={colors[0]?.h} />
-        </label>
-      </div> */}
       <svg
         ref={svgRef}
         className="SaturationBrightnessPlot-svg"
@@ -158,7 +160,7 @@ const SaturationBrightnessPlot = ({
           {horizontalLines}
           {verticalLines}
           <text x={2} y={2} style={{ fontSize: 2 }}>
-            Saturation
+            {xAxisLabel}
           </text>
           <text x={95} y={2} style={{ fontSize: 2 }}>
             100
@@ -169,20 +171,19 @@ const SaturationBrightnessPlot = ({
             transform="rotate(-90, 10,10)"
             style={{ fontSize: 2 }}
           >
-            Brightness
+            {yAxisLabel}
           </text>
           <text x={0} y={99} style={{ fontSize: 2 }}>
             0
           </text>
         </g>
 
-        {colors.map(({ s, v }, i) => {
+        {coords.map((c, i) => {
           // console.log(indexDragging, rect);
-          const coord =
-            indexDraggingRef.current === i ? rect : { x: s, y: 100 - v };
+          const coord = indexDraggingRef.current === i ? rect : c;
           return (
             <DraggableCircle
-              key={`s${s}v${v}}`}
+              key={`x${c.x}y${c.y}}`}
               onMouseDown={(e) => startDrag(e, svgRef, i)}
               {...coord}
             />
@@ -241,13 +242,20 @@ const ColorDisplay = ({
 
 const InputWithSVPlot = () => {
   const [hexCodes, setHexCodes] = useState(["#f2e6e6"]);
-  const updateColorAtIndex = useCallback(
-    (color: HSVColor, index: number) => {
-      console.log("updateColorAtIndex", color, index);
+  const hsvs = hexCodes?.map(hex2Rgb).map(rgb2hsv);
+  const updateCoordAtIndex = useCallback(
+    (coord: XYCoord, index: number) => {
+      // normalizeHSV(colorToUpdate)
+      console.log("updateCoordAtIndex", coord, index);
       const newHexCodes = hexCodes?.map((h, i) => {
         if (i === index) {
-          const newHex = rgb2Hex(HSV2RGB(color));
-          console.log({ newHex, RGB: HSV2RGB(color), color });
+          const colorToUpdate = normalizeHSV({
+            h: hsvs[index].h,
+            s: coord.x,
+            v: 100 - coord.y,
+          });
+          console.log({ coord, colorToUpdate, rgb: HSV2RGB(colorToUpdate) });
+          const newHex = rgb2Hex(HSV2RGB(colorToUpdate));
           return newHex;
         } else {
           return h;
@@ -275,9 +283,11 @@ const InputWithSVPlot = () => {
             ></textarea>
           </label>
         </div>
-        <SaturationBrightnessPlot
-          colors={hexCodes?.map(hex2Rgb).map(rgb2hsv)}
-          updateColorAtIndex={updateColorAtIndex}
+        <Draggable2DSVGPlot
+          xAxisLabel="Saturation"
+          yAxisLabel="Brightness"
+          coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
+          updateCoordAtIndex={updateCoordAtIndex}
         />
       </div>
       <ColorsDisplay hexCodes={hexCodes} />
