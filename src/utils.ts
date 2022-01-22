@@ -102,3 +102,27 @@ export function HSV2RGB({ h, s, v }: HSVValue) {
 export function HSV2String({ h, s, v }: HSVValue) {
   return `HSV(${h},${s}, ${v})`
 }
+
+
+function luminance(r, g, b) {
+  var a = [r, g, b].map(function (v) {
+    v /= 255;
+    return v <= 0.03928
+      ? v / 12.92
+      : Math.pow((v + 0.055) / 1.055, 2.4);
+  });
+  return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+
+/**
+ * contrast({r: 255, g: 255, b: 255}, {r:0 , g:0, b:255}); // 8.592 for blue
+// minimal recommended contrast ratio is 4.5, or 3 for larger f
+ */
+export function contrast(rgb1: { r: number; g: number; b: number }, rgb2: { r: number; g: number; b: number }) {
+  var lum1 = luminance(rgb1.r, rgb1.g, rgb1.b);
+  var lum2 = luminance(rgb2.r, rgb2.g, rgb2.b);
+  var brightest = Math.max(lum1, lum2);
+  var darkest = Math.min(lum1, lum2);
+  return (brightest + 0.05)
+    / (darkest + 0.05);
+}

@@ -3,6 +3,7 @@ import { useState, useRef, SVGAttributes, useCallback } from "react";
 import { ChromePicker } from "react-color";
 
 import {
+  contrast,
   hex2Rgb,
   HSV2RGB,
   HSV2String,
@@ -126,6 +127,13 @@ const Draggable2DSVGPlot = ({
       };
       setRect(newRect);
       rectRef.current = newRect;
+      updateCoordAtIndex?.(
+        {
+          x: newRect.x,
+          y: newRect.y,
+        },
+        indexDraggingRef.current
+      );
     };
 
     const mouseup = (event) => {
@@ -196,6 +204,7 @@ const Draggable2DSVGPlot = ({
 
 const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
   const [showMode, setShowMode] = useState("Hex");
+  const [showContrast, setShowContrast] = useState(true);
   return (
     <div>
       <label>
@@ -209,9 +218,36 @@ const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
           <option value="HSV">HSV</option>
         </select>
       </label>
-      {hexCodes?.map((c) => (
-        <ColorDisplay key={c} colorHex={c} showMode={showMode} />
-      ))}
+      <label>
+        <input
+          type="checkbox"
+          checked={showContrast}
+          onChange={(e) => setShowContrast(e.currentTarget.checked)}
+        />{" "}
+        Contrast
+      </label>
+      {hexCodes?.map((c) => {
+        const rgbValue = hex2Rgb(c) || { r: 255, g: 255, b: 255 };
+        const contrastWithWhite = contrast(rgbValue, {
+          r: 255,
+          g: 255,
+          b: 255,
+        }).toFixed(2);
+        const contrastWithBlack = contrast(rgbValue, {
+          r: 0,
+          g: 0,
+          b: 0,
+        }).toFixed(2);
+        const contrastString = `${contrastWithWhite} - ${contrastWithBlack}`;
+        return (
+          <ColorDisplay
+            key={c}
+            colorHex={c}
+            showMode={showMode}
+            trailingText={showContrast ? contrastString : undefined}
+          />
+        );
+      })}
     </div>
   );
 };
@@ -220,9 +256,11 @@ const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
 const ColorDisplay = ({
   colorHex,
   showMode,
+  trailingText,
 }: {
   colorHex: string;
   showMode?: string;
+  trailingText?: string;
 }) => {
   // .map(hex2Rgb).map(rgb2hsv))
   let displayColorText = colorHex.toUpperCase();
@@ -236,6 +274,9 @@ const ColorDisplay = ({
         className="ColorsDisplay-colorBlock"
         style={{ background: colorHex }}
       />
+      {trailingText ? (
+        <div className="ColorsDisplay-trailingText">{trailingText}</div>
+      ) : null}
     </div>
   );
 };

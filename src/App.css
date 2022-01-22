@@ -33,6 +33,13 @@
   font-family: "Roboto Mono", monospace;
   justify-self: end;
 }
+.ColorsDisplay-trailingText {
+  font-family: "Roboto Mono", monospace;
+  justify-self: end;
+  /* Fixed width to align color block vertically */
+  width: 125px;
+  text-align: center;
+}
 
 .ColorsDisplay-colorBlock {
   width: 24px;
