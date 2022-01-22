@@ -361,6 +361,18 @@ const saturationBrightnessTemplatePair = [
     [65, 18],
     [54, 10],
   ],
+  [
+    [17, 98],
+    [51, 97],
+    [90, 96],
+    [90, 85],
+    [92, 70],
+    [87, 58],
+    [75, 44],
+    [63, 33],
+    [52, 22],
+    [32, 11],
+  ],
 ];
 
 const SuggestColorWithHue = () => {
@@ -400,7 +412,7 @@ const SuggestColorWithHue = () => {
           >
             <option>0</option>
             <option>1</option>
-            {/* <option>2</option> */}
+            <option>2</option>
           </select>
         </label>
       </div>
