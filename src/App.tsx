@@ -12,6 +12,7 @@ import {
   rgb2hsv,
 } from "./utils";
 import "./App.css";
+import { GitHubLink } from "./GitHubLink";
 
 interface HSVColor {
   h: number;
@@ -490,6 +491,7 @@ function App() {
       <InputWithSVPlot />
       <SuggestColorWithHue />
       <ColorPicker />
+      <GitHubLink />
     </div>
   );
 }
