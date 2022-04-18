@@ -77,6 +77,7 @@ const Draggable2DSVGPlot = ({
   updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
 }) => {
   const viewBoxSize = 100;
+  const gridColor = "#d2e9f7";
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
   // const [indexDragging, setIndexDragging] = useState(-1);
@@ -93,8 +94,8 @@ const Draggable2DSVGPlot = ({
       x1={t}
       y1={0}
       x2={t}
-      y2={100}
-      stroke="#d2e9f7"
+      y2={viewBoxSize}
+      stroke={gridColor}
       strokeWidth={0.5}
     />
   ));
@@ -103,9 +104,9 @@ const Draggable2DSVGPlot = ({
       key={"v" + t}
       x1={0}
       y1={t}
-      x2={100}
+      x2={viewBoxSize}
       y2={t}
-      stroke="#d2e9f7"
+      stroke={gridColor}
       strokeWidth={0.5}
     />
   ));
@@ -196,6 +197,12 @@ const Draggable2DSVGPlot = ({
         <g name="grid lines">
           {horizontalLines}
           {verticalLines}
+          <rect
+            width={viewBoxSize}
+            height={viewBoxSize}
+            fill="none"
+            stroke={gridColor}
+          />
           <text x={2} y={2} style={{ fontSize: 2 }}>
             {xAxisLabel}
           </text>
