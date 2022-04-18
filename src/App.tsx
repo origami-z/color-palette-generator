@@ -1,4 +1,4 @@
-import { useState, useRef, SVGAttributes, useCallback } from "react";
+import { useState, useRef, SVGAttributes, useCallback, useId } from "react";
 
 import { ChromePicker } from "react-color";
 
@@ -188,53 +188,51 @@ const Draggable2DSVGPlot = ({
   };
 
   return (
-    <div>
-      <svg
-        ref={svgRef}
-        className="SaturationBrightnessPlot-svg"
-        viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
-      >
-        <g name="grid lines">
-          {horizontalLines}
-          {verticalLines}
-          <rect
-            width={viewBoxSize}
-            height={viewBoxSize}
-            fill="none"
-            stroke={gridColor}
-          />
-          <text x={2} y={2} style={{ fontSize: 2 }}>
-            {xAxisLabel}
-          </text>
-          <text x={95} y={2} style={{ fontSize: 2 }}>
-            100
-          </text>
-          <text
-            x={6}
-            y={2}
-            transform="rotate(-90, 10,10)"
-            style={{ fontSize: 2 }}
-          >
-            {yAxisLabel}
-          </text>
-          <text x={0} y={99} style={{ fontSize: 2 }}>
-            0
-          </text>
-        </g>
+    <svg
+      ref={svgRef}
+      className="SaturationBrightnessPlot-svg"
+      viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+    >
+      <g name="grid lines">
+        {horizontalLines}
+        {verticalLines}
+        <rect
+          width={viewBoxSize}
+          height={viewBoxSize}
+          fill="none"
+          stroke={gridColor}
+        />
+        <text x={2} y={2} style={{ fontSize: 2 }}>
+          {xAxisLabel}
+        </text>
+        <text x={95} y={2} style={{ fontSize: 2 }}>
+          100
+        </text>
+        <text
+          x={6}
+          y={2}
+          transform="rotate(-90, 10,10)"
+          style={{ fontSize: 2 }}
+        >
+          {yAxisLabel}
+        </text>
+        <text x={0} y={99} style={{ fontSize: 2 }}>
+          0
+        </text>
+      </g>
 
-        {coords.map((c, i) => {
-          // console.log(indexDragging, rect);
-          const coord = indexDraggingRef.current === i ? rect : c;
-          return (
-            <DraggableCircle
-              key={`x${c.x}y${c.y}}`}
-              onMouseDown={(e) => startDrag(e, svgRef, i)}
-              {...coord}
-            />
-          );
-        })}
-      </svg>
-    </div>
+      {coords.map((c, i) => {
+        // console.log(indexDragging, rect);
+        const coord = indexDraggingRef.current === i ? rect : c;
+        return (
+          <DraggableCircle
+            key={`x${c.x}y${c.y}}`}
+            onMouseDown={(e) => startDrag(e, svgRef, i)}
+            {...coord}
+          />
+        );
+      })}
+    </svg>
   );
 };
 
@@ -327,11 +325,12 @@ const InputWithSVPlot = () => {
     s: any;
     v: any;
   }[];
+  const [hueValue, setHueValue] = useState(0);
   const updateCoordAtIndex = useCallback(
     (coord: XYCoord, index: number) => {
       // normalizeHSV(colorToUpdate)
       console.log("updateCoordAtIndex", coord, index);
-      const newHexCodes = hexCodes?.map((h, i) => {
+      const newHexCodes = hexCodes?.map((hex, i) => {
         if (i === index) {
           const colorToUpdate = normalizeHSV({
             h: hsvs[index].h,
@@ -344,18 +343,35 @@ const InputWithSVPlot = () => {
             colorToUpdate.v < 0 ||
             colorToUpdate.v > 1
           ) {
-            return h;
+            return hex;
           } else {
             console.log({ coord, colorToUpdate, rgb: HSV2RGB(colorToUpdate) });
             const newHex = rgb2Hex(HSV2RGB(colorToUpdate));
             return newHex;
           }
         } else {
-          return h;
+          return hex;
         }
       });
       console.log({ newHexCodes });
       setHexCodes(newHexCodes);
+    },
+    [hexCodes]
+  );
+  const rangeId = useId();
+  const handleSliderChange = useCallback(
+    (e) => {
+      const newHue = Number.parseInt(e.currentTarget.value);
+      setHueValue(newHue);
+      setHexCodes(
+        hexCodes.map((hexCode) => {
+          const hsv = rgb2hsv(hex2Rgb(hexCode))!;
+          const newHsv = { ...hsv, h: newHue };
+          const newHex = rgb2Hex(HSV2RGB(normalizeHSV(newHsv)));
+          // console.log({ newHue, newHsv, newHex });
+          return newHex;
+        })
+      );
     },
     [hexCodes]
   );
@@ -368,20 +384,44 @@ const InputWithSVPlot = () => {
             <textarea
               defaultValue="#f2e6e6"
               // value={colorInput}
-              onChange={(e) =>
-                setHexCodes(
-                  e.currentTarget.value.match(/\#[a-f0-9]{6}/gi)?.slice() || []
-                )
-              }
+              onChange={(e) => {
+                const newHexCodes =
+                  e.currentTarget.value.match(/\#[a-f0-9]{6}/gi)?.slice() || [];
+                setHexCodes(newHexCodes);
+                if (newHexCodes.length > 0) {
+                  const newHsv = rgb2hsv(hex2Rgb(newHexCodes[0]));
+                  if (newHsv) {
+                    setHueValue(newHsv.h);
+                  }
+                }
+              }}
             ></textarea>
           </label>
         </div>
-        <Draggable2DSVGPlot
-          xAxisLabel="Saturation"
-          yAxisLabel="Brightness"
-          coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
-          updateCoordAtIndex={updateCoordAtIndex}
-        />
+        <div style={{ display: "flex" }}>
+          <Draggable2DSVGPlot
+            xAxisLabel="Saturation"
+            yAxisLabel="Brightness"
+            coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
+            updateCoordAtIndex={updateCoordAtIndex}
+          />
+          <div className="SaturationBrightnessPlot-HueSetter">
+            <label htmlFor={rangeId}>
+              Hue
+              <br />
+              {hueValue}
+            </label>
+            <input
+              id={rangeId}
+              type="range"
+              className="SaturationBrightnessPlot-Slider"
+              min={0}
+              max={360}
+              value={hueValue}
+              onChange={handleSliderChange}
+            />
+          </div>
+        </div>
       </div>
       <ColorsDisplay hexCodes={hexCodes} />
     </>

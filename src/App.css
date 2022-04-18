@@ -22,6 +22,17 @@
   cursor: grab;
 }
 
+.SaturationBrightnessPlot-HueSetter {
+  display: flex;
+  flex-direction: column;
+}
+
+.SaturationBrightnessPlot-Slider {
+  margin: 16px 0;
+  -webkit-appearance: slider-vertical; /* Chromium */
+  flex:1;
+}
+
 .ColorsDisplay-row {
   display: flex;
   justify-content: center;

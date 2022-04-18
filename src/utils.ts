@@ -21,7 +21,10 @@ export interface HSVValue {
 }
 
 
-/** rgb: 0-255 */
+/** 
+ * rgb: 0-255
+ * @returns 0<h<360, 0<s<100, 0<v<100
+ */
 export function rgb2hsv(rgb: { r: number, g: number, b: number } | null) {
   if (rgb === null) return null;
   const { r, g, b } = rgb;
