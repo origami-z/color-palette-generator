@@ -47,6 +47,24 @@ interface XYCoord {
   y: number;
 }
 
+const restrainInViewBox = (
+  rect: {
+    x: number;
+    y: number;
+  },
+  viewBoxSize: number
+) => {
+  const newRect = { ...rect };
+
+  if (newRect.x < 0) newRect.x = 0;
+  if (newRect.x > viewBoxSize) newRect.x = viewBoxSize;
+
+  if (newRect.y < 0) newRect.y = 0;
+  if (newRect.y > viewBoxSize) newRect.y = viewBoxSize;
+
+  return newRect;
+};
+
 const Draggable2DSVGPlot = ({
   xAxisLabel,
   yAxisLabel,
@@ -58,6 +76,7 @@ const Draggable2DSVGPlot = ({
   coords?: XYCoord[];
   updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
 }) => {
+  const viewBoxSize = 100;
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
   // const [indexDragging, setIndexDragging] = useState(-1);
@@ -131,12 +150,16 @@ const Draggable2DSVGPlot = ({
         x: cursor.x - dragOffset.x,
         y: cursor.y - dragOffset.y,
       };
-      setRect(newRect);
-      rectRef.current = newRect;
+
+      const restrainedRect = restrainInViewBox(newRect, viewBoxSize);
+
+      setRect(restrainedRect);
+      rectRef.current = restrainedRect;
+      console.log("mousemove", { restrainedRect });
       updateCoordAtIndex?.(
         {
-          x: newRect.x,
-          y: newRect.y,
+          x: restrainedRect.x,
+          y: restrainedRect.y,
         },
         indexDraggingRef.current
       );
@@ -150,7 +173,7 @@ const Draggable2DSVGPlot = ({
         },
         indexDraggingRef.current
       );
-      rectRef.current;
+      // rectRef.current;
       // setIndexDragging(-1);
       indexDraggingRef.current = -1;
       // setRect({ x: 0, y: 0 });
@@ -168,7 +191,7 @@ const Draggable2DSVGPlot = ({
       <svg
         ref={svgRef}
         className="SaturationBrightnessPlot-svg"
-        viewBox="0 0 100 100"
+        viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
       >
         <g name="grid lines">
           {horizontalLines}
@@ -308,9 +331,18 @@ const InputWithSVPlot = () => {
             s: coord.x,
             v: 100 - coord.y,
           });
-          console.log({ coord, colorToUpdate, rgb: HSV2RGB(colorToUpdate) });
-          const newHex = rgb2Hex(HSV2RGB(colorToUpdate));
-          return newHex;
+          if (
+            colorToUpdate.s < 0 ||
+            colorToUpdate.s > 1 ||
+            colorToUpdate.v < 0 ||
+            colorToUpdate.v > 1
+          ) {
+            return h;
+          } else {
+            console.log({ coord, colorToUpdate, rgb: HSV2RGB(colorToUpdate) });
+            const newHex = rgb2Hex(HSV2RGB(colorToUpdate));
+            return newHex;
+          }
         } else {
           return h;
         }
