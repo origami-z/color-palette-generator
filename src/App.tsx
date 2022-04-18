@@ -398,7 +398,7 @@ const InputWithSVPlot = () => {
             ></textarea>
           </label>
         </div>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", padding: "0 16px" }}>
           <Draggable2DSVGPlot
             xAxisLabel="Saturation"
             yAxisLabel="Brightness"
