@@ -22,7 +22,9 @@ export interface HSVValue {
 
 
 /** rgb: 0-255 */
-export function rgb2hsv({ r, g, b }: { r: number, g: number, b: number }) {
+export function rgb2hsv(rgb: { r: number, g: number, b: number } | null) {
+  if (rgb === null) return null;
+  const { r, g, b } = rgb;
   let rabs, gabs, babs, rr, gg, bb, h, s, v: number, diff: number, diffc, percentRoundFn;
   rabs = r / 255;
   gabs = g / 255;
@@ -99,7 +101,9 @@ export function HSV2RGB({ h, s, v }: HSVValue) {
   };
 }
 
-export function HSV2String({ h, s, v }: HSVValue) {
+export function HSV2String(hsv: HSVValue | null) {
+  if (hsv === null) return '';
+  const { h, s, v } = hsv;
   return `HSV(${h},${s}, ${v})`
 }
 

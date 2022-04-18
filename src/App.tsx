@@ -100,7 +100,7 @@ const Draggable2DSVGPlot = ({
     let point = svgRef.current.createSVGPoint();
     point.x = event.clientX;
     point.y = event.clientY;
-    point = point.matrixTransform(svgRef.current.getScreenCTM().inverse());
+    point = point.matrixTransform(svgRef.current.getScreenCTM()?.inverse());
     console.log("start drag", { x: point.x, y: point.y });
     setDragOffset({
       x: point.x - rectRef.current.x,
@@ -119,8 +119,13 @@ const Draggable2DSVGPlot = ({
       event.preventDefault();
       point.x = event.clientX;
       point.y = event.clientY;
+
+      if (!svgRef.current) {
+        console.error("SVG Ref is null");
+        return;
+      }
       let cursor = point.matrixTransform(
-        svgRef.current.getScreenCTM().inverse()
+        svgRef.current.getScreenCTM()?.inverse()
       );
       const newRect = {
         x: cursor.x - dragOffset.x,
@@ -284,7 +289,14 @@ const ColorDisplay = ({
 
 const InputWithSVPlot = () => {
   const [hexCodes, setHexCodes] = useState(["#f2e6e6"]);
-  const hsvs = hexCodes?.map(hex2Rgb).map(rgb2hsv);
+  const hsvs = hexCodes
+    ?.map(hex2Rgb)
+    .map(rgb2hsv)
+    .filter((x) => x !== null) as {
+    h: number;
+    s: any;
+    v: any;
+  }[];
   const updateCoordAtIndex = useCallback(
     (coord: XYCoord, index: number) => {
       // normalizeHSV(colorToUpdate)
@@ -455,36 +467,6 @@ const ColorPicker = () => {
     </div>
   );
 };
-
-function Box() {
-  const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
-    // "type" is required. It is used by the "accept" specification of drop targets.
-    type: "BOX",
-    // The collect function utilizes a "monitor" instance (see the Overview for what this is)
-    // to pull important pieces of state from the DnD system.
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }));
-  console.log("Draggable Box", { isDragging });
-
-  return (
-    <div ref={dragPreview}>
-      {/* The drag ref marks this node as being the "pick-up" node */}
-      <div
-        role="Handle"
-        ref={drag}
-        style={{
-          border: "1px solid black",
-          opacity: isDragging ? 0.5 : 1,
-          width: 64,
-          height: 64,
-        }}
-      />
-    </div>
-  );
-}
-
 function App() {
   return (
     <div className="App">
