@@ -236,11 +236,11 @@ const Draggable2DSVGPlot = ({
   );
 };
 
-const ColorsDisplay = ({ hexCodes }: { hexCodes?: string[] }) => {
+const ColorsInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
   const [showMode, setShowMode] = useState("Hex");
   const [showContrast, setShowContrast] = useState(true);
   return (
-    <div>
+    <div className="ColorsInpsector">
       <label>
         Show as:
         <select
@@ -316,6 +316,7 @@ const ColorDisplay = ({
 };
 
 const InputWithSVPlot = () => {
+  const textAreaId = useId();
   const [hexCodes, setHexCodes] = useState(["#f2e6e6"]);
   const hsvs = hexCodes
     ?.map(hex2Rgb)
@@ -377,53 +378,47 @@ const InputWithSVPlot = () => {
   );
   return (
     <>
-      <div>
-        <div>
-          <label>
-            Hex values:
-            <textarea
-              defaultValue="#f2e6e6"
-              // value={colorInput}
-              onChange={(e) => {
-                const newHexCodes =
-                  e.currentTarget.value.match(/\#[a-f0-9]{6}/gi)?.slice() || [];
-                setHexCodes(newHexCodes);
-                if (newHexCodes.length > 0) {
-                  const newHsv = rgb2hsv(hex2Rgb(newHexCodes[0]));
-                  if (newHsv) {
-                    setHueValue(newHsv.h);
-                  }
-                }
-              }}
-            ></textarea>
-          </label>
-        </div>
-        <div style={{ display: "flex", padding: "0 16px" }}>
-          <Draggable2DSVGPlot
-            xAxisLabel="Saturation"
-            yAxisLabel="Brightness"
-            coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
-            updateCoordAtIndex={updateCoordAtIndex}
+      <div className="InputTextArea-container">
+        <label htmlFor={textAreaId}>Hex values:</label>
+        <br />
+        <textarea
+          spellCheck={false}
+          id={textAreaId}
+          defaultValue="#f2e6e6"
+          rows={10}
+          onChange={(e) => {
+            const newHexCodes =
+              e.currentTarget.value.match(/\#[a-f0-9]{6}/gi)?.slice() || [];
+            setHexCodes(newHexCodes);
+            if (newHexCodes.length > 0) {
+              const newHsv = rgb2hsv(hex2Rgb(newHexCodes[0]));
+              if (newHsv) {
+                setHueValue(newHsv.h);
+              }
+            }
+          }}
+        ></textarea>
+      </div>
+      <div className="SaturationBrightnessPlot-container">
+        <Draggable2DSVGPlot
+          xAxisLabel="Saturation"
+          yAxisLabel="Brightness"
+          coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
+          updateCoordAtIndex={updateCoordAtIndex}
+        />
+        <div className="SaturationBrightnessPlot-HueSetter">
+          <label htmlFor={rangeId}>Hue: {hueValue}</label>
+          <input
+            id={rangeId}
+            type="range"
+            min={0}
+            max={360}
+            value={hueValue}
+            onChange={handleSliderChange}
           />
-          <div className="SaturationBrightnessPlot-HueSetter">
-            <label htmlFor={rangeId}>
-              Hue
-              <br />
-              {hueValue}
-            </label>
-            <input
-              id={rangeId}
-              type="range"
-              className="SaturationBrightnessPlot-Slider"
-              min={0}
-              max={360}
-              value={hueValue}
-              onChange={handleSliderChange}
-            />
-          </div>
         </div>
       </div>
-      <ColorsDisplay hexCodes={hexCodes} />
+      <ColorsInpsector hexCodes={hexCodes} />
     </>
   );
 };
@@ -486,7 +481,8 @@ const SuggestColorWithHue = () => {
     <div>
       <div>
         <label>
-          Generate from hue (0-360):
+          Generate from hue (0-360)
+          <br />
           <input
             type="number"
             onChange={(e) => setHue(Number.parseInt(e.target.value))}
@@ -509,7 +505,6 @@ const SuggestColorWithHue = () => {
         </label>
       </div>
       <div>
-        <h3>Hue: {hue}</h3>
         {validHue ? (
           <div className="">
             {hexValues.map((colorHex) => (
