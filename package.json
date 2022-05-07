@@ -26,5 +26,6 @@
   },
   "resolutions": {
     "@jpmorganchase/uitk-lab@0.1.0": "patch:@jpmorganchase/uitk-lab@npm:0.1.0#.yarn/patches/@jpmorganchase-uitk-lab-npm-0.1.0-a3475a9177.patch"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }
