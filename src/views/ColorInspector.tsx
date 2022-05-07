@@ -15,12 +15,7 @@ export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
   const [showMode, setShowMode] = useState("Hex");
   const [showContrast, setShowContrast] = useState(true);
   return (
-    <FlexLayout
-      gap={1}
-      className="ColorInpsector"
-      direction="column"
-      wrap={false}
-    >
+    <FlexLayout gap={1} className="ColorInpsector" direction="column">
       <FlexItem>
         <FlexLayout gap={1} justify="center">
           <FormField
