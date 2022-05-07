@@ -1,3 +1,5 @@
+import { Button } from "@jpmorganchase/uitk-core";
+import { Dropdown, FormField, Input } from "@jpmorganchase/uitk-lab";
 import { useState } from "react";
 import { rgb2Hex, HSV2RGB } from "../utils";
 import { ColorDisplay } from "./ColorDisplay";
@@ -57,31 +59,23 @@ export const SuggestColorWithHue = () => {
     : [];
 
   return (
-    <div>
+    <div className="SuggestColorWithHue">
       <div>
-        <label>
-          Generate from hue (0-360)
-          <br />
-          <input
+        <FormField label="Generate hue from 0-360" fullWidth={false}>
+          <Input
             type="number"
             onChange={(e) => setHue(Number.parseInt(e.target.value))}
           />
-        </label>
+        </FormField>
       </div>
       <div>
-        <label>
-          Template:
-          <select
-            value={templateIndex}
-            onChange={(e) =>
-              setTemplateIndex(Number.parseInt(e.currentTarget.value))
-            }
-          >
-            <option>0</option>
-            <option>1</option>
-            <option>2</option>
-          </select>
-        </label>
+        <FormField label="Template" labelPlacement="left" fullWidth={false}>
+          <Dropdown
+            source={[0, 1, 2]}
+            selectedItem={templateIndex}
+            onChange={(_, item) => setTemplateIndex(item || 0)}
+          />
+        </FormField>
       </div>
       <div>
         {validHue ? (
@@ -89,13 +83,13 @@ export const SuggestColorWithHue = () => {
             {hexValues.map((colorHex) => (
               <ColorDisplay key={colorHex} colorHex={colorHex} />
             ))}
-            <button
+            <Button
               onClick={() =>
                 navigator.clipboard.writeText(hexValues.join("\n"))
               }
             >
               copy
-            </button>
+            </Button>
           </div>
         ) : null}
       </div>
