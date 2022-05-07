@@ -1,3 +1,4 @@
+import { Slider } from "@jpmorganchase/uitk-lab";
 import { SVGAttributes, useRef, useState, useId, useCallback } from "react";
 import { hex2Rgb, rgb2hsv, normalizeHSV, HSV2RGB, rgb2Hex } from "../utils";
 import { ColorInpsector } from "./ColorInspector";
@@ -19,7 +20,7 @@ const DraggableCircle = ({
       cx={x}
       cy={y}
       r={1}
-      fill="red"
+      fill="var(--uitk-color-red-500)"
     />
   );
 };
@@ -59,7 +60,7 @@ const Draggable2DSVGPlot = ({
   updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
 }) => {
   const viewBoxSize = 100;
-  const gridColor = "#d2e9f7";
+  const gridColor = "var(--uitk-color-blue-10)";
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
   // const [indexDragging, setIndexDragging] = useState(-1);
@@ -183,6 +184,7 @@ const Draggable2DSVGPlot = ({
           height={viewBoxSize}
           fill="none"
           stroke={gridColor}
+          strokeWidth={0.5}
         />
         <text x={2} y={2} style={{ fontSize: 2 }}>
           {xAxisLabel}
@@ -218,9 +220,12 @@ const Draggable2DSVGPlot = ({
   );
 };
 
-export const InputWithSaturationBrightnessPlot = () => {
-  const textAreaId = useId();
-  const [hexCodes, setHexCodes] = useState(["#f2e6e6"]);
+export const SaturationBrightnessPlot = ({
+  hexCodes,
+  onHexCodesChange,
+  hueValue,
+  onHueChange,
+}) => {
   const hsvs = hexCodes
     ?.map(hex2Rgb)
     .map(rgb2hsv)
@@ -229,7 +234,6 @@ export const InputWithSaturationBrightnessPlot = () => {
     s: any;
     v: any;
   }[];
-  const [hueValue, setHueValue] = useState(0);
   const updateCoordAtIndex = useCallback(
     (coord: XYCoord, index: number) => {
       // normalizeHSV(colorToUpdate)
@@ -258,16 +262,15 @@ export const InputWithSaturationBrightnessPlot = () => {
         }
       });
       console.log({ newHexCodes });
-      setHexCodes(newHexCodes);
+      onHexCodesChange(newHexCodes);
     },
     [hexCodes]
   );
   const rangeId = useId();
   const handleSliderChange = useCallback(
-    (e) => {
-      const newHue = Number.parseInt(e.currentTarget.value);
-      setHueValue(newHue);
-      setHexCodes(
+    (newHue) => {
+      onHueChange(newHue);
+      onHexCodesChange(
         hexCodes.map((hexCode) => {
           const hsv = rgb2hsv(hex2Rgb(hexCode))!;
           const newHsv = { ...hsv, h: newHue };
@@ -280,48 +283,22 @@ export const InputWithSaturationBrightnessPlot = () => {
     [hexCodes]
   );
   return (
-    <>
-      <div className="InputTextArea-container">
-        <label htmlFor={textAreaId}>Hex values:</label>
-        <br />
-        <textarea
-          spellCheck={false}
-          id={textAreaId}
-          defaultValue="#f2e6e6"
-          rows={10}
-          onChange={(e) => {
-            const newHexCodes =
-              e.currentTarget.value.match(/\#[a-f0-9]{6}/gi)?.slice() || [];
-            setHexCodes(newHexCodes);
-            if (newHexCodes.length > 0) {
-              const newHsv = rgb2hsv(hex2Rgb(newHexCodes[0]));
-              if (newHsv) {
-                setHueValue(newHsv.h);
-              }
-            }
-          }}
-        ></textarea>
-      </div>
-      <div className="SaturationBrightnessPlot-container">
-        <Draggable2DSVGPlot
-          xAxisLabel="Saturation"
-          yAxisLabel="Brightness"
-          coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
-          updateCoordAtIndex={updateCoordAtIndex}
+    <div className="SaturationBrightnessPlot-container">
+      <Draggable2DSVGPlot
+        xAxisLabel="Saturation"
+        yAxisLabel="Brightness"
+        coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
+        updateCoordAtIndex={updateCoordAtIndex}
+      />
+      <div className="SaturationBrightnessPlot-HueSetter">
+        <Slider
+          label={`Hue: ${hueValue}`}
+          onChange={handleSliderChange}
+          min={0}
+          max={360}
+          value={hueValue}
         />
-        <div className="SaturationBrightnessPlot-HueSetter">
-          <label htmlFor={rangeId}>Hue: {hueValue}</label>
-          <input
-            id={rangeId}
-            type="range"
-            min={0}
-            max={360}
-            value={hueValue}
-            onChange={handleSliderChange}
-          />
-        </div>
       </div>
-      <ColorInpsector hexCodes={hexCodes} />
-    </>
+    </div>
   );
 };
