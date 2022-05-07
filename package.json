@@ -8,6 +8,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@jpmorganchase/uitk-core": "^0.1.0",
+    "@jpmorganchase/uitk-icons": "^0.1.0",
+    "@jpmorganchase/uitk-lab": "^0.1.0",
+    "@jpmorganchase/uitk-theme": "^0.1.0",
     "react": "^18.1.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.1.0"
