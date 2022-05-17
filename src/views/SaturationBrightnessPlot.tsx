@@ -20,7 +20,6 @@ const DraggableCircle = ({
       cx={x}
       cy={y}
       r={1}
-      fill="var(--uitk-color-red-500)"
     />
   );
 };
@@ -60,7 +59,7 @@ const Draggable2DSVGPlot = ({
   updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
 }) => {
   const viewBoxSize = 100;
-  const gridColor = "var(--uitk-color-blue-10)";
+  const gridColor = "var(--chart-grid)";
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
   // const [indexDragging, setIndexDragging] = useState(-1);
@@ -78,7 +77,6 @@ const Draggable2DSVGPlot = ({
       y1={0}
       x2={t}
       y2={viewBoxSize}
-      stroke={gridColor}
       strokeWidth={0.5}
     />
   ));
@@ -89,7 +87,6 @@ const Draggable2DSVGPlot = ({
       y1={t}
       x2={viewBoxSize}
       y2={t}
-      stroke={gridColor}
       strokeWidth={0.5}
     />
   ));
@@ -183,7 +180,6 @@ const Draggable2DSVGPlot = ({
           width={viewBoxSize}
           height={viewBoxSize}
           fill="none"
-          stroke={gridColor}
           strokeWidth={0.5}
         />
         <text x={2} y={2} style={{ fontSize: 2 }}>

@@ -29,6 +29,7 @@ export const InputTextArea = ({ onHexCodesChange, onHueChange }) => {
       <label htmlFor={textAreaId}>Color values:</label>
       <br />
       <textarea
+        className="InputTextArea-textarea"
         spellCheck={false}
         id={textAreaId}
         defaultValue="#f2e6e6"

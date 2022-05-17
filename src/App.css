@@ -11,6 +11,9 @@
     "inspect"
     "picker";
   grid-template-columns: 1fr;
+
+  background-color: var(--uitk-container-background);
+  color: var(--uitk-text-primary-color);
 }
 
 @media screen and (min-width: 900px) {
@@ -36,6 +39,11 @@
   grid-area: input;
 }
 
+.InputTextArea-textarea {
+  color: var(--uitk-editable-text-color);
+  background-color: var(--uitk-editable-background);
+}
+
 .SuggestColorWithHue {
   grid-area: generator;
 }
@@ -51,6 +59,19 @@
 .SaturationBrightnessPlot-svg {
   margin-block-end: calc(var(--uitk-spacing-unit) * 2);
   min-width: 256px;
+}
+
+.SaturationBrightnessPlot-svg line,
+.SaturationBrightnessPlot-svg rect {
+  stroke: var(--chart-grid);
+}
+
+.SaturationBrightnessPlot-svg text {
+  fill: var(--chart-text);
+}
+
+.SaturationBrightnessPlot-circle {
+  fill: var(--chart-dot);
 }
 
 .SaturationBrightnessPlot-circle:hover {
@@ -100,4 +121,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.ThemeSwitch {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.GitHubLink {
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }

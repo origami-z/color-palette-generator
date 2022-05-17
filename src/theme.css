@@ -1,0 +1,15 @@
+/*
+    Extends uitk theme 
+ */
+
+.uitk-light {
+  --chart-grid: var(--uitk-separable-border-color-1);
+  --chart-text: var(--uitk-text-secondary-color);
+  --chart-dot: var(--uitk-color-red-500);
+}
+
+.uitk-dark {
+  --chart-grid: var(--uitk-separable-border-color-3);
+  --chart-text: var(--uitk-text-secondary-color);
+  --chart-dot: var(--uitk-color-red-500);
+}
