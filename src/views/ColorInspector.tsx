@@ -12,7 +12,7 @@ import {
 const colorFormats = ["Hex", "HSV"];
 
 export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
-  const [showMode, setShowMode] = useState("Hex");
+  const [showMode, setShowMode] = useState(colorFormats[0]);
   const [showContrast, setShowContrast] = useState(true);
   return (
     <FlexLayout gap={1} className="ColorInpsector" direction="column">
