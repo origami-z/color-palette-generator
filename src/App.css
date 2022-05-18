@@ -123,7 +123,8 @@
   align-items: center;
 }
 
-.ThemeSwitch {
+/* Temporary fix for CSS loading order in prod build */
+.ThemeSwitch.ThemeSwitch {
   position: absolute;
   top: 0px;
   left: 0px;
