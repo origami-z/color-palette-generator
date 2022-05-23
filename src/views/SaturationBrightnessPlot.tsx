@@ -1,4 +1,4 @@
-import { Slider } from "@jpmorganchase/uitk-lab";
+import { Checkbox, Slider } from "@jpmorganchase/uitk-lab";
 import { SVGAttributes, useRef, useState, useId, useCallback } from "react";
 import { hex2Rgb, rgb2hsv, normalizeHSV, HSV2RGB, rgb2Hex } from "../utils";
 import { ColorInpsector } from "./ColorInspector";
@@ -6,17 +6,23 @@ import { ColorInpsector } from "./ColorInspector";
 const DraggableCircle = ({
   x,
   y,
+  outline,
   className,
   ...restProps
 }: {
   x: number;
   y: number;
-  // isDragging?: boolean;
+  outline?: boolean;
 } & SVGAttributes<SVGCircleElement>) => {
   return (
     <circle
       {...restProps}
-      className={`SaturationBrightnessPlot-circle ${className || ""}`}
+      className={`${
+        outline
+          ? "SaturationBrightnessPlot-circleOutline"
+          : "SaturationBrightnessPlot-circle"
+      } ${className || ""}`}
+      vectorEffect="non-scaling-stroke"
       cx={x}
       cy={y}
       r={1}
@@ -52,11 +58,13 @@ const Draggable2DSVGPlot = ({
   yAxisLabel,
   coords = [],
   updateCoordAtIndex,
+  coloredBackgroundHue,
 }: {
   xAxisLabel?: string;
   yAxisLabel?: string;
   coords?: XYCoord[];
   updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
+  coloredBackgroundHue?: number;
 }) => {
   const viewBoxSize = 100;
   const gridColor = "var(--chart-grid)";
@@ -77,7 +85,9 @@ const Draggable2DSVGPlot = ({
       y1={0}
       x2={t}
       y2={viewBoxSize}
-      strokeWidth={0.5}
+      strokeWidth={1}
+      vectorEffect="non-scaling-stroke"
+      style={{ strokeOpacity: coloredBackgroundHue === undefined ? 1 : 0.2 }}
     />
   ));
   const verticalLines = tens.map((t) => (
@@ -87,7 +97,9 @@ const Draggable2DSVGPlot = ({
       y1={t}
       x2={viewBoxSize}
       y2={t}
-      strokeWidth={0.5}
+      strokeWidth={1}
+      vectorEffect="non-scaling-stroke"
+      style={{ strokeOpacity: coloredBackgroundHue === undefined ? 1 : 0.2 }}
     />
   ));
 
@@ -167,6 +179,40 @@ const Draggable2DSVGPlot = ({
     document.addEventListener("mouseup", mouseup);
   };
 
+  const backgroundGradients =
+    coloredBackgroundHue !== undefined ? (
+      <>
+        <defs>
+          <linearGradient id="svg-whiteGradient">
+            <stop offset="0%" stopColor="#fff" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+          </linearGradient>
+          <linearGradient id="svg-blackGradient" gradientTransform="rotate(90)">
+            <stop offset="0%" stopColor="rgba(0,0,0,0)" />
+            <stop offset="100%" stopColor="#000" />
+          </linearGradient>
+        </defs>
+        <rect
+          width={viewBoxSize}
+          height={viewBoxSize}
+          fill={rgb2Hex(HSV2RGB({ h: coloredBackgroundHue / 360, s: 1, v: 1 }))}
+          // strokeWidth={0.5}
+        />
+        <rect
+          width={viewBoxSize}
+          height={viewBoxSize}
+          fill="url('#svg-whiteGradient')"
+          // strokeWidth={0.5}
+        />
+        <rect
+          width={viewBoxSize}
+          height={viewBoxSize}
+          fill="url('#svg-blackGradient')"
+          // strokeWidth={0.5}
+        />
+      </>
+    ) : null;
+
   return (
     <svg
       ref={svgRef}
@@ -174,13 +220,15 @@ const Draggable2DSVGPlot = ({
       viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
     >
       <g name="grid lines">
+        {backgroundGradients}
         {horizontalLines}
         {verticalLines}
         <rect
           width={viewBoxSize}
           height={viewBoxSize}
           fill="none"
-          strokeWidth={0.5}
+          vectorEffect="non-scaling-stroke"
+          strokeWidth={2}
         />
         <text x={2} y={2} style={{ fontSize: 2 }}>
           {xAxisLabel}
@@ -208,6 +256,7 @@ const Draggable2DSVGPlot = ({
           <DraggableCircle
             key={`x${c.x}y${c.y}}`}
             onMouseDown={(e) => startDrag(e, svgRef, i)}
+            outline={coloredBackgroundHue !== undefined}
             {...coord}
           />
         );
@@ -222,6 +271,7 @@ export const SaturationBrightnessPlot = ({
   hueValue,
   onHueChange,
 }) => {
+  const [showColoredBackground, setShowColoredBackground] = useState(false);
   const hsvs = hexCodes
     ?.map(hex2Rgb)
     .map(rgb2hsv)
@@ -280,11 +330,17 @@ export const SaturationBrightnessPlot = ({
   );
   return (
     <div className="SaturationBrightnessPlot-container">
+      <Checkbox
+        label="Colored Background"
+        checked={showColoredBackground}
+        onChange={(_, checked) => setShowColoredBackground(checked)}
+      />
       <Draggable2DSVGPlot
         xAxisLabel="Saturation"
         yAxisLabel="Brightness"
         coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
         updateCoordAtIndex={updateCoordAtIndex}
+        coloredBackgroundHue={showColoredBackground ? hueValue : undefined}
       />
       <div className="SaturationBrightnessPlot-HueSetter">
         <Slider
