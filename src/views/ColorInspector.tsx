@@ -8,6 +8,7 @@ import {
   FlexLayout,
   FlexItem,
 } from "@jpmorganchase/uitk-lab";
+import { Button } from "@jpmorganchase/uitk-core";
 
 const colorFormats = ["Hex", "HSV"];
 
@@ -22,7 +23,7 @@ export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
             label="Show as"
             labelPlacement="left"
             className="ColorInpsector-preferences-showAs"
-            // fullWidth={false}
+            fullWidth={false}
           >
             <Dropdown
               source={colorFormats}
@@ -37,30 +38,40 @@ export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
           />
         </FlexLayout>
       </FlexItem>
-      <FlexItem>
-        {hexCodes?.map((c) => {
-          const rgbValue = hex2Rgb(c) || { r: 255, g: 255, b: 255 };
-          const contrastWithWhite = contrast(rgbValue, {
-            r: 255,
-            g: 255,
-            b: 255,
-          }).toFixed(2);
-          const contrastWithBlack = contrast(rgbValue, {
-            r: 0,
-            g: 0,
-            b: 0,
-          }).toFixed(2);
-          const contrastString = `${contrastWithWhite} - ${contrastWithBlack}`;
-          return (
-            <ColorDisplay
-              key={c}
-              colorHex={c}
-              showMode={showMode}
-              trailingText={showContrast ? contrastString : undefined}
-            />
-          );
-        })}
-      </FlexItem>
+      <FlexLayout gap={1} direction="column" justify="center" align="center">
+        <FlexItem>
+          {hexCodes?.map((c) => {
+            const rgbValue = hex2Rgb(c) || { r: 255, g: 255, b: 255 };
+            const contrastWithWhite = contrast(rgbValue, {
+              r: 255,
+              g: 255,
+              b: 255,
+            }).toFixed(2);
+            const contrastWithBlack = contrast(rgbValue, {
+              r: 0,
+              g: 0,
+              b: 0,
+            }).toFixed(2);
+            const contrastString = `${contrastWithWhite} - ${contrastWithBlack}`;
+            return (
+              <ColorDisplay
+                key={c}
+                colorHex={c}
+                showMode={showMode}
+                trailingText={showContrast ? contrastString : undefined}
+              />
+            );
+          })}
+        </FlexItem>
+
+        <Button
+          onClick={() =>
+            navigator.clipboard.writeText((hexCodes || []).join("\n"))
+          }
+        >
+          Copy Hex
+        </Button>
+      </FlexLayout>
     </FlexLayout>
   );
 };
