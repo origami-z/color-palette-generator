@@ -196,19 +196,19 @@ const Draggable2DSVGPlot = ({
           width={viewBoxSize}
           height={viewBoxSize}
           fill={rgb2Hex(HSV2RGB({ h: coloredBackgroundHue / 360, s: 1, v: 1 }))}
-          // strokeWidth={0.5}
+          strokeWidth={0}
         />
         <rect
           width={viewBoxSize}
           height={viewBoxSize}
           fill="url('#svg-whiteGradient')"
-          // strokeWidth={0.5}
+          strokeWidth={0}
         />
         <rect
           width={viewBoxSize}
           height={viewBoxSize}
           fill="url('#svg-blackGradient')"
-          // strokeWidth={0.5}
+          strokeWidth={0}
         />
       </>
     ) : null;
