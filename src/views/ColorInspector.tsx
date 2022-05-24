@@ -31,7 +31,7 @@ export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
             />
           </FormField>
           <Checkbox
-            label="Contrast"
+            label="Contrast (W - B)"
             checked={showContrast}
             onChange={(_, checked) => setShowContrast(checked)}
           />
