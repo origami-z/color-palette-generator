@@ -1,7 +1,7 @@
-import { Checkbox, Slider } from "@jpmorganchase/uitk-lab";
+import { Checkbox } from "@jpmorganchase/uitk-core";
+import { Slider } from "@jpmorganchase/uitk-lab";
 import { SVGAttributes, useRef, useState, useId, useCallback } from "react";
 import { hex2Rgb, rgb2hsv, normalizeHSV, HSV2RGB, rgb2Hex } from "../utils";
-import { ColorInpsector } from "./ColorInspector";
 
 const DraggableCircle = ({
   x,

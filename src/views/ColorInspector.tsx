@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { hex2Rgb, contrast } from "../utils";
 import { ColorDisplay } from "./ColorDisplay";
+import { Dropdown } from "@jpmorganchase/uitk-lab";
 import {
   FormField,
-  Dropdown,
+  Button,
   Checkbox,
   FlexLayout,
   FlexItem,
-} from "@jpmorganchase/uitk-lab";
-import { Button } from "@jpmorganchase/uitk-core";
+} from "@jpmorganchase/uitk-core";
 
 const colorFormats = ["Hex", "HSV"];
 

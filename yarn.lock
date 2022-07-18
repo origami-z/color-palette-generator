@@ -365,43 +365,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "@floating-ui/core@npm:0.6.2"
-  checksum: b3e1844da852fe141cfa4163026a7c5ffb4399a96105340dffdd5b76dcafea72c6221a06b4674c2b500bc776adc9d9e4ed39dba55e7d844d9507d994c0af743a
+"@floating-ui/core@npm:^0.7.3":
+  version: 0.7.3
+  resolution: "@floating-ui/core@npm:0.7.3"
+  checksum: f48f9fb0d19dcbe7a68c38e8de7fabb11f0c0e6e0ef215ae60b5004900bacb1386e7b89cb377d91a90ff7d147ea1f06c2905136ecf34dea162d9696d8f448d5f
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^0.4.5":
-  version: 0.4.5
-  resolution: "@floating-ui/dom@npm:0.4.5"
+"@floating-ui/dom@npm:^0.5.3":
+  version: 0.5.4
+  resolution: "@floating-ui/dom@npm:0.5.4"
   dependencies:
-    "@floating-ui/core": ^0.6.2
-  checksum: 3024aba55fe7ee78b429a6a5d61f5719a6bb2acc79c8a33304b9d30c443efba3a5288acaf9003402e31ee97a533eda97c30a0f2c97e9e54c697df9b80a23dad8
+    "@floating-ui/core": ^0.7.3
+  checksum: 9f9d8a51a828c6be5f187204aa6d293c6c9ef70d51dcc5891a4d85683745fceebf79ff8826d0f75ae41b45c3b138367d339756f27f41be87a8770742ebc0de42
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom-interactions@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@floating-ui/react-dom-interactions@npm:0.4.0"
+"@floating-ui/react-dom-interactions@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@floating-ui/react-dom-interactions@npm:0.5.0"
   dependencies:
-    "@floating-ui/react-dom": ^0.6.3
+    "@floating-ui/react-dom": ^0.7.0
     aria-hidden: ^1.1.3
     use-isomorphic-layout-effect: ^1.1.1
-  checksum: a0840cd4d52d2c4b0c0736714e305b7e0abc3b39c3b2ad21001098815075ee6de098c2711bedb2d53845760c99e9c328d7e082326caea04081759a753e82e3bc
+  checksum: 4c90f4a159b855480135bcd12bfb1f3b3d92c8b3d834c493f429cd4516554ad4088a4aa21b34d3fe6e2b64626bb1f954cd069a797984a75288b6b924f7309c64
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom@npm:^0.6.3":
-  version: 0.6.3
-  resolution: "@floating-ui/react-dom@npm:0.6.3"
+"@floating-ui/react-dom@npm:^0.7.0":
+  version: 0.7.2
+  resolution: "@floating-ui/react-dom@npm:0.7.2"
   dependencies:
-    "@floating-ui/dom": ^0.4.5
+    "@floating-ui/dom": ^0.5.3
     use-isomorphic-layout-effect: ^1.1.1
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 1af930aac4e13ed9a25ea2cf70e629d36363034a70ea407a6f8d8d4bd62979c59d3748b58e1ef31c427fdf21a754f285aabba9f14b9e916ab69eb5212144ef6c
+  checksum: bc3f2b5557f87f6f4bbccfe3e8d097abafad61a41083d3b79f3499f27590e273bcb3dc7136c2444841ee7a8c0d2a70cc1385458c16103fa8b70eade80c24af52
   languageName: node
   linkType: hard
 
@@ -421,47 +421,48 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jpmorganchase/uitk-core@npm:0.1.0, @jpmorganchase/uitk-core@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-core@npm:0.1.0"
+"@jpmorganchase/uitk-core@npm:0.3.0, @jpmorganchase/uitk-core@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@jpmorganchase/uitk-core@npm:0.3.0"
   dependencies:
+    "@floating-ui/react-dom-interactions": ^0.5.0
+    "@jpmorganchase/uitk-icons": 0.2.0
     classnames: ^2.2.6
     warning: ^4.0.3
   peerDependencies:
-    "@types/react": ^16.8.6 || ^17.0.0
+    "@types/react": ">=16.8.6"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 5ce9ed8a18e0dc8ec3aebab27c6084d34f28c8a8fe56f3d82dfb072002748e05dbb8e1b8242c3e102c10ce94c44543079994ca1720adf598f5beae7212320a28
+  checksum: 2efd86dbf6874cdc807b2d41ecb2b1458570601047b4b70053cc012259179c795eb174462d39f71799905b19e8c47bc82a0a234aca0b8d02a6cdd24764c7a832
   languageName: node
   linkType: hard
 
-"@jpmorganchase/uitk-icons@npm:0.1.0, @jpmorganchase/uitk-icons@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-icons@npm:0.1.0"
+"@jpmorganchase/uitk-icons@npm:0.2.0, @jpmorganchase/uitk-icons@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@jpmorganchase/uitk-icons@npm:0.2.0"
   dependencies:
-    "@jpmorganchase/uitk-core": 0.1.0
+    classnames: ^2.2.6
   peerDependencies:
-    "@types/react": ^16.8.6 || ^17.0.0
+    "@types/react": ">=16.8.6"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: cc377ff4dd6aee1669c284ca917e397a476cfd2b5f3767289dacfb6371a25f3f0e11c9eb8a15dca7c02d926d620c623712f143e387a8f833f4342b2055111b1d
+  checksum: 9c1ee9a683685ba305f6eeb85502aa4ab83f99e74630ca5b2eddd120b649ba9bc07088a9d8118b33f0e96aa6daba0e01ca7f827ec8c6016b75f0d5e5e8b961f0
   languageName: node
   linkType: hard
 
-"@jpmorganchase/uitk-lab@npm:0.1.0, @jpmorganchase/uitk-lab@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-lab@npm:0.1.0"
+"@jpmorganchase/uitk-lab@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@jpmorganchase/uitk-lab@npm:0.3.0"
   dependencies:
-    "@floating-ui/react-dom-interactions": ^0.4.0
-    "@jpmorganchase/uitk-core": 0.1.0
-    "@jpmorganchase/uitk-icons": 0.1.0
-    "@jpmorganchase/uitk-lab": 0.1.0
+    "@floating-ui/react-dom-interactions": ^0.5.0
+    "@jpmorganchase/uitk-core": 0.3.0
+    "@jpmorganchase/uitk-icons": 0.2.0
     aria-hidden: ^1.1.1
     attr-accept: ^2.0.0
     classnames: ^2.2.6
@@ -476,20 +477,20 @@ __metadata:
     tinycolor2: ^1.4.2
     warning: ^4.0.3
   peerDependencies:
-    "@types/react": ^16.8.6 || ^17.0.0
+    "@types/react": ">=16.8.6"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 1f9690aa9e56826e21ced624ee9bf0c8fda5f65b67a3f8cba573f64b558590c4c3a1515ef248e184fe1655ee4e5cf0e8beb057ac497512a3f8603b494455110d
+  checksum: 4f63f77e24823f46709c2ab29a69365c58470054bf01bf46e7cf2b8b289508c4890975deaca8718c7e903ea589222c04fa1c4b429542cf381ee500e0371d28dd
   languageName: node
   linkType: hard
 
-"@jpmorganchase/uitk-theme@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-theme@npm:0.1.0"
-  checksum: 1a77600e5ef97165cf4d9debee2287e162fa3f3f0e87b9f2d0562401add9f2f858b2ca7fb15a649f786597bc4cb3ba8ca3ca6244ff65f682fbb1ae3cd91bca63
+"@jpmorganchase/uitk-theme@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@jpmorganchase/uitk-theme@npm:0.3.0"
+  checksum: 3c051157f7e7665d87ef9dbbb4e7eeaa71f392901617f6c13c1de3668c7e130eddb00055dc891788bff22e55827ddcaa750ba6915cfee7a46ae8c617336c0bcb
   languageName: node
   linkType: hard
 
@@ -870,10 +871,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "color-palette-generator@workspace:."
   dependencies:
-    "@jpmorganchase/uitk-core": ^0.1.0
-    "@jpmorganchase/uitk-icons": ^0.1.0
-    "@jpmorganchase/uitk-lab": ^0.1.0
-    "@jpmorganchase/uitk-theme": ^0.1.0
+    "@jpmorganchase/uitk-core": ^0.3.0
+    "@jpmorganchase/uitk-icons": ^0.2.0
+    "@jpmorganchase/uitk-lab": ^0.3.0
+    "@jpmorganchase/uitk-theme": ^0.3.0
     "@types/react": ^18.0.9
     "@types/react-color": ^3.0.6
     "@types/react-dom": ^18.0.3
