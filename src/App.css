@@ -12,8 +12,8 @@
     "picker";
   grid-template-columns: 1fr;
 
-  background-color: var(--uitk-container-background);
-  color: var(--uitk-text-primary-color);
+  background-color: var(--uitk-container-background-medium);
+  color: var(--uitk-text-primary-foreground);
 }
 
 @media screen and (min-width: 900px) {
@@ -40,8 +40,8 @@
 }
 
 .InputTextArea-textarea {
-  color: var(--uitk-editable-text-color);
-  background-color: var(--uitk-editable-background);
+  color: var(--uitk-text-primary-foreground);
+  background-color: var(--uitk-editable-background-low);
 }
 
 .SuggestColorWithHue {
@@ -52,9 +52,9 @@
   grid-area: plot;
   display: flex;
   flex-direction: column;
-  padding: var(--uitk-spacing-unit);
+  padding: var(--uitk-size-unit);
   justify-content: center;
-  gap: calc(var(--uitk-spacing-unit) * 2);
+  gap: calc(var(--uitk-size-unit) * 2);
 }
 
 .SaturationBrightnessPlot-svg {
