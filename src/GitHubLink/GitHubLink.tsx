@@ -1,10 +1,10 @@
-import { useTheme } from "@jpmorganchase/uitk-core";
+import { useTheme } from "@salt-ds/core";
 import GHLogo from "./GitHub-Mark-64px.png";
 import GHLightLogo from "./GitHub-Mark-Light-64px.png";
 
 export const GitHubLink = () => {
-  const [currentTheme] = useTheme();
-  console.log(currentTheme);
+  const { mode } = useTheme();
+
   return (
     <div className="GitHubLink">
       <a
@@ -13,7 +13,7 @@ export const GitHubLink = () => {
       >
         <img
           alt="GitHub Logo"
-          src={currentTheme.name === "light" ? GHLogo : GHLightLogo}
+          src={mode === "light" ? GHLogo : GHLightLogo}
           width={32}
         />
       </a>

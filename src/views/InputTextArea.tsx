@@ -1,6 +1,7 @@
-import { Dropdown, FormField } from "@jpmorganchase/uitk-lab";
+import { Dropdown, FormField } from "@salt-ds/lab";
 import { useId, useState } from "react";
-import { rgb2hsv, hex2Rgb, rgb2Hex, rgbString2Hex } from "../utils";
+import { hex2Rgb, rgb2hsv, rgbString2Hex } from "../utils";
+
 const colorFormats = ["Hex", "RGB"] as const;
 
 export const InputTextArea = ({ onHexCodesChange, onHueChange }) => {
@@ -50,8 +51,8 @@ export const InputTextArea = ({ onHexCodesChange, onHueChange }) => {
       <FormField label="Parse format" labelPlacement="left" fullWidth={false}>
         <Dropdown
           source={colorFormats as any}
-          selectedItem={showMode}
-          onChange={(_, item) => {
+          selected={showMode}
+          onSelectionChange={(_, item) => {
             item && setShowMode(item);
           }}
         />

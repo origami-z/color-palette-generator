@@ -1,19 +1,19 @@
 /*
-    Extends uitk theme 
+    Extends Salt theme 
  */
 
-.uitk-light {
-  --chart-grid: var(--uitk-separable-border-color-1);
-  --chart-text: var(--uitk-text-secondary-color);
-  --chart-dot: var(--uitk-color-red-500);
-  --chart-dot-outline: var(--uitk-color-white);
-  --chart-dot-outline-2: var(--uitk-color-teal-800);
+ .salt-theme[data-mode=light] {
+  --chart-grid: var(--salt-separable-tertiary-borderColor);
+  --chart-text: var(--salt-text-secondary-color);
+  --chart-dot: var(--salt-color-red-500);
+  --chart-dot-outline: var(--salt-color-white);
+  --chart-dot-outline-2: var(--salt-color-teal-800);
 }
 
-.uitk-dark {
-  --chart-grid: var(--uitk-separable-border-color-3);
-  --chart-text: var(--uitk-text-secondary-color);
-  --chart-dot: var(--uitk-color-red-500);
-  --chart-dot-outline: var(--uitk-color-white);
-  --chart-dot-outline-2: var(--uitk-color-teal-30);
+.salt-theme[data-mode=dark] {
+  --chart-grid: var(--salt-separable-tertiary-borderColor);
+  --chart-text: var(--salt-text-secondary-color);
+  --chart-dot: var(--salt-color-red-500);
+  --chart-dot-outline: var(--salt-color-white);
+  --chart-dot-outline-2: var(--salt-color-teal-30);
 }

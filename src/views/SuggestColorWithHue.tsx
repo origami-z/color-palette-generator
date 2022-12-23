@@ -1,7 +1,7 @@
-import { Button } from "@jpmorganchase/uitk-core";
-import { Dropdown, FormField, Input } from "@jpmorganchase/uitk-lab";
+import { Button } from "@salt-ds/core";
+import { Dropdown, FormField, Input } from "@salt-ds/lab";
 import { useState } from "react";
-import { rgb2Hex, HSV2RGB } from "../utils";
+import { HSV2RGB, rgb2Hex } from "../utils";
 import { ColorDisplay } from "./ColorDisplay";
 
 const saturationBrightnessTemplatePair = [
@@ -72,8 +72,8 @@ export const SuggestColorWithHue = () => {
         <FormField label="Template" labelPlacement="left" fullWidth={false}>
           <Dropdown
             source={[0, 1, 2]}
-            selectedItem={templateIndex}
-            onChange={(_, item) => setTemplateIndex(item || 0)}
+            selected={templateIndex}
+            onSelectionChange={(_, item) => setTemplateIndex(item || 0)}
           />
         </FormField>
       </div>
