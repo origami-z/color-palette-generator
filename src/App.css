@@ -52,9 +52,9 @@
   grid-area: plot;
   display: flex;
   flex-direction: column;
-  padding: var(--salt-spacing-unit);
+  padding: var(--salt-size-unit);
   justify-content: center;
-  gap: calc(var(--salt-spacing-unit) * 2);
+  gap: calc(var(--salt-size-unit) * 2);
 }
 
 .SaturationBrightnessPlot-svg {
