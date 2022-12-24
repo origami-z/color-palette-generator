@@ -116,6 +116,7 @@
 .ColorsDisplay-colorCode {
   font-family: "Roboto Mono", monospace;
   justify-self: end;
+  font-size: 14px;
 }
 .ColorsDisplay-trailingText {
   font-family: "Roboto Mono", monospace;

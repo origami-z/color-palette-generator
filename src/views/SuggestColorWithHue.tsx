@@ -1,4 +1,4 @@
-import { Button } from "@salt-ds/core";
+import { Button, StackLayout } from "@salt-ds/core";
 import { Dropdown, FormField, Input } from "@salt-ds/lab";
 import { useState } from "react";
 import { HSV2RGB, rgb2Hex } from "../utils";
@@ -59,7 +59,7 @@ export const SuggestColorWithHue = () => {
     : [];
 
   return (
-    <div className="SuggestColorWithHue">
+    <StackLayout className="SuggestColorWithHue" gap={1}>
       <div>
         <FormField label="Generate hue from 0-360" fullWidth={false}>
           <Input
@@ -93,6 +93,6 @@ export const SuggestColorWithHue = () => {
           </div>
         ) : null}
       </div>
-    </div>
+    </StackLayout>
   );
 };

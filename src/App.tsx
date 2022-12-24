@@ -16,7 +16,7 @@ function App() {
   const [hueValue, setHueValue] = useState(0);
 
   return (
-    <SaltProvider theme={selectedTheme}>
+    <SaltProvider mode={selectedTheme}>
       <div className="App">
         <ThemeSwitchButton
           theme={selectedTheme}
