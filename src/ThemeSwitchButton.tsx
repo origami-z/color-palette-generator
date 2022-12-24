@@ -1,4 +1,4 @@
-import { Button } from "@jpmorganchase/uitk-core";
+import { Button } from "@salt-ds/core";
 import { ComponentPropsWithoutRef } from "react";
 
 const Moon = (props: ComponentPropsWithoutRef<"svg">) => (

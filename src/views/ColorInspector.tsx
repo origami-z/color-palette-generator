@@ -1,14 +1,8 @@
+import { Button, FlexItem, FlexLayout } from "@salt-ds/core";
+import { Checkbox, Dropdown, FormField } from "@salt-ds/lab";
 import { useState } from "react";
-import { hex2Rgb, contrast } from "../utils";
+import { contrast, hex2Rgb } from "../utils";
 import { ColorDisplay } from "./ColorDisplay";
-import {
-  FormField,
-  Dropdown,
-  Checkbox,
-  FlexLayout,
-  FlexItem,
-} from "@jpmorganchase/uitk-lab";
-import { Button } from "@jpmorganchase/uitk-core";
 
 const colorFormats = ["Hex", "HSV"];
 
@@ -27,8 +21,8 @@ export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
           >
             <Dropdown
               source={colorFormats}
-              selectedItem={showMode}
-              onChange={(_, item) => setShowMode(item || "")}
+              selected={showMode}
+              onSelectionChange={(_, item) => setShowMode(item || "")}
             />
           </FormField>
           <Checkbox
