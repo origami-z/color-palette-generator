@@ -1,6 +1,7 @@
 import { Checkbox, Slider } from "@salt-ds/lab";
 import { SVGAttributes, useCallback, useId, useRef, useState } from "react";
 import { hex2Rgb, HSV2RGB, normalizeHSV, rgb2Hex, rgb2hsv } from "../utils";
+import { fitCurve } from "../curve/fit-curve";
 
 const DraggableCircle = ({
   x,
@@ -212,6 +213,20 @@ const Draggable2DSVGPlot = ({
       </>
     ) : null;
 
+  const coordArray = coords.map((coord) => [coord.x, coord.y]);
+  const curveFitted = fitCurve(coordArray, 1000);
+  const bezierPoints =
+    curveFitted && curveFitted.length > 0 ? curveFitted[0] : undefined;
+  console.log({ coordArray, curveFitted, bezierPoints });
+  const bezier = bezierPoints ? (
+    <path
+      d={`M ${bezierPoints[0][0]} ${bezierPoints[0][1]} C ${bezierPoints[1][0]} ${bezierPoints[1][1]}, ${bezierPoints[2][0]} ${bezierPoints[2][1]}, ${bezierPoints[3][0]} ${bezierPoints[3][1]}`}
+      fill="none"
+      stroke="gray"
+      strokeWidth={2}
+    ></path>
+  ) : null;
+
   return (
     <svg
       ref={svgRef}
@@ -247,6 +262,8 @@ const Draggable2DSVGPlot = ({
           0
         </text>
       </g>
+
+      {bezier}
 
       {coords.map((c, i) => {
         // console.log(indexDragging, rect);
