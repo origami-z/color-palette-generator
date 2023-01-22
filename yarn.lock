@@ -365,43 +365,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/core@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "@floating-ui/core@npm:0.6.2"
-  checksum: b3e1844da852fe141cfa4163026a7c5ffb4399a96105340dffdd5b76dcafea72c6221a06b4674c2b500bc776adc9d9e4ed39dba55e7d844d9507d994c0af743a
+"@floating-ui/core@npm:^0.7.3":
+  version: 0.7.3
+  resolution: "@floating-ui/core@npm:0.7.3"
+  checksum: f48f9fb0d19dcbe7a68c38e8de7fabb11f0c0e6e0ef215ae60b5004900bacb1386e7b89cb377d91a90ff7d147ea1f06c2905136ecf34dea162d9696d8f448d5f
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^0.4.5":
-  version: 0.4.5
-  resolution: "@floating-ui/dom@npm:0.4.5"
+"@floating-ui/dom@npm:^0.5.3":
+  version: 0.5.4
+  resolution: "@floating-ui/dom@npm:0.5.4"
   dependencies:
-    "@floating-ui/core": ^0.6.2
-  checksum: 3024aba55fe7ee78b429a6a5d61f5719a6bb2acc79c8a33304b9d30c443efba3a5288acaf9003402e31ee97a533eda97c30a0f2c97e9e54c697df9b80a23dad8
+    "@floating-ui/core": ^0.7.3
+  checksum: 9f9d8a51a828c6be5f187204aa6d293c6c9ef70d51dcc5891a4d85683745fceebf79ff8826d0f75ae41b45c3b138367d339756f27f41be87a8770742ebc0de42
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom-interactions@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "@floating-ui/react-dom-interactions@npm:0.4.0"
+"@floating-ui/react-dom-interactions@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@floating-ui/react-dom-interactions@npm:0.5.0"
   dependencies:
-    "@floating-ui/react-dom": ^0.6.3
+    "@floating-ui/react-dom": ^0.7.0
     aria-hidden: ^1.1.3
     use-isomorphic-layout-effect: ^1.1.1
-  checksum: a0840cd4d52d2c4b0c0736714e305b7e0abc3b39c3b2ad21001098815075ee6de098c2711bedb2d53845760c99e9c328d7e082326caea04081759a753e82e3bc
+  checksum: 4c90f4a159b855480135bcd12bfb1f3b3d92c8b3d834c493f429cd4516554ad4088a4aa21b34d3fe6e2b64626bb1f954cd069a797984a75288b6b924f7309c64
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom@npm:^0.6.3":
-  version: 0.6.3
-  resolution: "@floating-ui/react-dom@npm:0.6.3"
+"@floating-ui/react-dom@npm:^0.7.0":
+  version: 0.7.2
+  resolution: "@floating-ui/react-dom@npm:0.7.2"
   dependencies:
-    "@floating-ui/dom": ^0.4.5
+    "@floating-ui/dom": ^0.5.3
     use-isomorphic-layout-effect: ^1.1.1
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 1af930aac4e13ed9a25ea2cf70e629d36363034a70ea407a6f8d8d4bd62979c59d3748b58e1ef31c427fdf21a754f285aabba9f14b9e916ab69eb5212144ef6c
+  checksum: bc3f2b5557f87f6f4bbccfe3e8d097abafad61a41083d3b79f3499f27590e273bcb3dc7136c2444841ee7a8c0d2a70cc1385458c16103fa8b70eade80c24af52
   languageName: node
   linkType: hard
 
@@ -421,75 +421,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jpmorganchase/uitk-core@npm:0.1.0, @jpmorganchase/uitk-core@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-core@npm:0.1.0"
+"@internationalized/date@npm:^3.0.0":
+  version: 3.0.2
+  resolution: "@internationalized/date@npm:3.0.2"
   dependencies:
-    classnames: ^2.2.6
-    warning: ^4.0.3
-  peerDependencies:
-    "@types/react": ^16.8.6 || ^17.0.0
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 5ce9ed8a18e0dc8ec3aebab27c6084d34f28c8a8fe56f3d82dfb072002748e05dbb8e1b8242c3e102c10ce94c44543079994ca1720adf598f5beae7212320a28
-  languageName: node
-  linkType: hard
-
-"@jpmorganchase/uitk-icons@npm:0.1.0, @jpmorganchase/uitk-icons@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-icons@npm:0.1.0"
-  dependencies:
-    "@jpmorganchase/uitk-core": 0.1.0
-  peerDependencies:
-    "@types/react": ^16.8.6 || ^17.0.0
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: cc377ff4dd6aee1669c284ca917e397a476cfd2b5f3767289dacfb6371a25f3f0e11c9eb8a15dca7c02d926d620c623712f143e387a8f833f4342b2055111b1d
-  languageName: node
-  linkType: hard
-
-"@jpmorganchase/uitk-lab@npm:0.1.0, @jpmorganchase/uitk-lab@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-lab@npm:0.1.0"
-  dependencies:
-    "@floating-ui/react-dom-interactions": ^0.4.0
-    "@jpmorganchase/uitk-core": 0.1.0
-    "@jpmorganchase/uitk-icons": 0.1.0
-    "@jpmorganchase/uitk-lab": 0.1.0
-    aria-hidden: ^1.1.1
-    attr-accept: ^2.0.0
-    classnames: ^2.2.6
-    clipboard-copy: ^4.0.1
-    compute-scroll-into-view: ^1.0.16
-    dayjs: 1.10.6
-    deepmerge: ^4.2.2
-    no-scroll: ^2.1.1
-    react-color: ^2.19.3
-    react-window: ^1.8.6
-    rifm: ^0.12.0
-    tinycolor2: ^1.4.2
-    warning: ^4.0.3
-  peerDependencies:
-    "@types/react": ^16.8.6 || ^17.0.0
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 1f9690aa9e56826e21ced624ee9bf0c8fda5f65b67a3f8cba573f64b558590c4c3a1515ef248e184fe1655ee4e5cf0e8beb057ac497512a3f8603b494455110d
-  languageName: node
-  linkType: hard
-
-"@jpmorganchase/uitk-theme@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@jpmorganchase/uitk-theme@npm:0.1.0"
-  checksum: 1a77600e5ef97165cf4d9debee2287e162fa3f3f0e87b9f2d0562401add9f2f858b2ca7fb15a649f786597bc4cb3ba8ca3ca6244ff65f682fbb1ae3cd91bca63
+    "@swc/helpers": ^0.4.14
+  checksum: 89c68e9feb2d9aa6d4005c574a5048fb1591e99fea5fd406cb680c40fdffc75650da0a795b3dffef861e951bcad7a0f800b65aa7b19f43b0ce0b99b39ef82d67
   languageName: node
   linkType: hard
 
@@ -561,6 +498,85 @@ __metadata:
     estree-walker: ^2.0.1
     picomatch: ^2.2.2
   checksum: 6bc41f22b1a0f1efec3043899e4d3b6b1497b3dea4d94292d8f83b4cf07a1073ecbaedd562a22d11913ff7659f459677b01b09e9598a98936e746780ecc93a12
+  languageName: node
+  linkType: hard
+
+"@salt-ds/core@npm:1.0.0, @salt-ds/core@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@salt-ds/core@npm:1.0.0"
+  dependencies:
+    "@salt-ds/icons": 1.0.0
+    classnames: ^2.2.6
+  peerDependencies:
+    "@types/react": ">=16.8.6"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 7b4f6fdbad3d4e8419d8c2022f5f24b25861a00f5910929176880acfd917f7dabf4175cbbeba01242c89d490430fc2c0d2904b5c983159f49f9e8cca0fbbeecd
+  languageName: node
+  linkType: hard
+
+"@salt-ds/icons@npm:1.0.0, @salt-ds/icons@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@salt-ds/icons@npm:1.0.0"
+  dependencies:
+    classnames: ^2.2.6
+  peerDependencies:
+    "@types/react": ">=16.8.6"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 6c776fa0121741c5ee88b5417affc0e6708a033341f334d5e21e8b650b3debecb343d4263d77df5befe4ecd2d72a322eea56dcfd099030aa9b57b553c0001e3f
+  languageName: node
+  linkType: hard
+
+"@salt-ds/lab@npm:^1.0.0-alpha.0":
+  version: 1.0.0-alpha.0
+  resolution: "@salt-ds/lab@npm:1.0.0-alpha.0"
+  dependencies:
+    "@floating-ui/react-dom-interactions": ^0.5.0
+    "@internationalized/date": ^3.0.0
+    "@salt-ds/core": 1.0.0
+    "@salt-ds/icons": 1.0.0
+    aria-hidden: ^1.1.1
+    attr-accept: ^2.0.0
+    classnames: ^2.2.6
+    clipboard-copy: ^4.0.1
+    compute-scroll-into-view: ^1.0.16
+    deepmerge: ^4.2.2
+    no-scroll: ^2.1.1
+    react-color: ^2.19.3
+    react-window: ^1.8.6
+    rifm: ^0.12.0
+    tinycolor2: ^1.4.2
+  peerDependencies:
+    "@types/react": ">=16.8.6"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 721f28984a577a9b6fe70a6760bc784cbea1a5884dfb2f6d5ec8563eade2f6f3beb04e7c36e1eba794eb76d4d7a6f433414aa5b8b9205a31d4d67563500f14cf
+  languageName: node
+  linkType: hard
+
+"@salt-ds/theme@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@salt-ds/theme@npm:1.0.0"
+  checksum: 632fdfb2b04505c521bcdeb184ed0f29cd8b0f213d5c1aef85f9293eb9f4aebfea6ea272c907d47d826bfe425f47b764fb034345af0d6144f7cce7c0e672641b
+  languageName: node
+  linkType: hard
+
+"@swc/helpers@npm:^0.4.14":
+  version: 0.4.14
+  resolution: "@swc/helpers@npm:0.4.14"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: 273fd3f3fc461a92f3790cc551ea054745c6d6959afbe1232e6d7aa1c722bbc114d308aab96bef5c78fc0303c85c7b472ef00e2253251cc89737f3b1af56e5a5
   languageName: node
   linkType: hard
 
@@ -870,10 +886,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "color-palette-generator@workspace:."
   dependencies:
-    "@jpmorganchase/uitk-core": ^0.1.0
-    "@jpmorganchase/uitk-icons": ^0.1.0
-    "@jpmorganchase/uitk-lab": ^0.1.0
-    "@jpmorganchase/uitk-theme": ^0.1.0
+    "@salt-ds/core": ^1.0.0
+    "@salt-ds/icons": ^1.0.0
+    "@salt-ds/lab": ^1.0.0-alpha.0
+    "@salt-ds/theme": ^1.0.0
     "@types/react": ^18.0.9
     "@types/react-color": ^3.0.6
     "@types/react-dom": ^18.0.3
@@ -929,13 +945,6 @@ __metadata:
   version: 3.0.10
   resolution: "csstype@npm:3.0.10"
   checksum: 20a8fa324f2b33ddf94aa7507d1b6ab3daa6f3cc308888dc50126585d7952f2471de69b2dbe0635d1fdc31223fef8e070842691877e725caf456e2378685a631
-  languageName: node
-  linkType: hard
-
-"dayjs@npm:1.10.6":
-  version: 1.10.6
-  resolution: "dayjs@npm:1.10.6"
-  checksum: a79af6d19cf1e3aefc231e480037b37df50701e8d0cdbe1736fc6665b7045a159777215c5c8dd42ede7dd3c4c4f4a174d4ddd5bffca51df2a4ba0e0e25a6163c
   languageName: node
   linkType: hard
 
@@ -1543,7 +1552,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -2238,6 +2247,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.4.0":
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: 19480d6e0313292bd6505d4efe096a6b31c70e21cf08b5febf4da62e95c265c8f571f7b36fcc3d1a17e068032f59c269fab3459d6cd3ed6949eafecf64315fca
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^4.6.4":
   version: 4.6.4
   resolution: "typescript@npm:4.6.4"
@@ -2321,15 +2337,6 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 5edf8afc132a598f82a1339aa503514a0e86f6264babe94531b9000d801f157c9a32ae022542404678acca43ee260ade04c4763c4b7b8d381a6b50511b4a1447
-  languageName: node
-  linkType: hard
-
-"warning@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "warning@npm:4.0.3"
-  dependencies:
-    loose-envify: ^1.0.0
-  checksum: 4f2cb6a9575e4faf71ddad9ad1ae7a00d0a75d24521c193fa464f30e6b04027bd97aa5d9546b0e13d3a150ab402eda216d59c1d0f2d6ca60124d96cd40dfa35c
   languageName: node
   linkType: hard
 
