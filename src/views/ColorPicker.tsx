@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChromePicker } from "react-color";
 
-import { FormField, Input } from "@jpmorganchase/uitk-lab";
+import { FormField, Input } from "@salt-ds/lab";
 
 export const ColorPicker = () => {
   const [hex, setHex] = useState("#abcdef");

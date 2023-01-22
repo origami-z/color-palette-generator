@@ -1,5 +1,5 @@
-import { Button } from "@jpmorganchase/uitk-core";
-import { Dropdown, FormField, Input } from "@jpmorganchase/uitk-lab";
+import { Button } from "@salt-ds/core";
+import { Dropdown, FormField, Input } from "@salt-ds/lab";
 import { useState } from "react";
 import { rgb2Hex, HSV2RGB } from "../utils";
 import { ColorDisplay } from "./ColorDisplay";

@@ -7,8 +7,8 @@ import {
   Checkbox,
   FlexLayout,
   FlexItem,
-} from "@jpmorganchase/uitk-lab";
-import { Button } from "@jpmorganchase/uitk-core";
+} from "@salt-ds/lab";
+import { Button } from "@salt-ds/core";
 
 const colorFormats = ["Hex", "HSV"];
 

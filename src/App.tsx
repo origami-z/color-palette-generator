@@ -7,7 +7,7 @@ import { useState } from "react";
 import { InputTextArea } from "./views/InputTextArea";
 import { ColorInpsector } from "./views/ColorInspector";
 import { ThemeSwitchButton } from "./ThemeSwitchButton";
-import { ToolkitProvider } from "@jpmorganchase/uitk-core";
+import { SaltProvider } from "@salt-ds/core";
 
 function App() {
   const [selectedTheme, setSelectedTheme] = useState<"light" | "dark">("light");
@@ -15,7 +15,7 @@ function App() {
   const [hueValue, setHueValue] = useState(0);
 
   return (
-    <ToolkitProvider theme={selectedTheme}>
+    <SaltProvider theme={selectedTheme}>
       <div className="App">
         <ThemeSwitchButton
           theme={selectedTheme}
@@ -39,7 +39,7 @@ function App() {
         <ColorPicker />
         <GitHubLink />
       </div>
-    </ToolkitProvider>
+    </SaltProvider>
   );
 }
 

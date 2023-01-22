@@ -1,4 +1,4 @@
-import { Dropdown, FormField } from "@jpmorganchase/uitk-lab";
+import { Dropdown, FormField } from "@salt-ds/lab";
 import { useId, useState } from "react";
 import { rgb2hsv, hex2Rgb, rgb2Hex, rgbString2Hex } from "../utils";
 const colorFormats = ["Hex", "RGB"] as const;

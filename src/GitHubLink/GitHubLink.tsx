@@ -1,4 +1,4 @@
-import { useTheme } from "@jpmorganchase/uitk-core";
+import { useTheme } from "@salt-ds/core";
 import GHLogo from "./GitHub-Mark-64px.png";
 import GHLightLogo from "./GitHub-Mark-Light-64px.png";
 
