@@ -12,8 +12,10 @@ Copy the red colors from [MUI](https://mui.com/material-ui/customization/color/#
 
 ![MUI red saturation brightness plot with slider](https://user-images.githubusercontent.com/5257855/163881977-93d44884-5bdd-4ee7-8988-8c138134e692.png)
 
-
 Use the top right panel to see some stats, and optionally drag the red dots on the plot to adjust then.
 
 ![MUI red stats](https://user-images.githubusercontent.com/5257855/163882112-14c95500-b8e5-49ed-a0c5-ebfe9a20eae5.png)
 
+### Misc
+
+Contrast guide: the saturation and brightness values that result contrast ratio against both white and black to be grater than 4.5 at given hue value.
