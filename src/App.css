@@ -51,10 +51,15 @@
 .SaturationBrightnessPlot-container {
   grid-area: plot;
   display: flex;
+  align-items: center;
   flex-direction: column;
   padding: var(--salt-size-unit);
   justify-content: center;
   gap: calc(var(--salt-size-unit) * 2);
+}
+
+.SaturationBrightnessPlot-checkboxes {
+  width: 270px;
 }
 
 .SaturationBrightnessPlot-svg {
@@ -79,6 +84,10 @@
   stroke: var(--chart-dot-outline);
   filter: drop-shadow(0px 0px 0.5px rgba(0, 0, 0, 1));
   fill: transparent;
+}
+
+.SaturationBrightnessPlot-overlayCircle {
+  fill: var(--chart-overlay-dot);
 }
 
 .SaturationBrightnessPlot-circleOutline2 {

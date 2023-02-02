@@ -1,19 +1,20 @@
 /*
     Extends Salt theme 
- */ 
- 
- .salt-theme {
+ */
+
+.salt-theme {
   --chart-grid: var(--salt-separable-tertiary-borderColor);
   --chart-text: var(--salt-text-secondary-foreground);
   --chart-dot: var(--salt-color-red-500);
- }
+  --chart-overlay-dot: var(--salt-container-secondary-background);
+}
 
- .salt-theme[data-mode=light] {
+.salt-theme[data-mode="light"] {
   --chart-dot-outline: var(--salt-color-white);
   --chart-dot-outline-2: var(--salt-color-teal-800);
 }
 
-.salt-theme[data-mode=dark] {
+.salt-theme[data-mode="dark"] {
   --chart-dot-outline: var(--salt-color-white);
   --chart-dot-outline-2: var(--salt-color-teal-30);
 }

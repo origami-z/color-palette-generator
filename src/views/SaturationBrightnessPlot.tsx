@@ -1,6 +1,23 @@
+import { FlexLayout } from "@salt-ds/core";
 import { Checkbox, Slider } from "@salt-ds/lab";
-import { SVGAttributes, useCallback, useId, useRef, useState } from "react";
-import { hex2Rgb, HSV2RGB, normalizeHSV, rgb2Hex, rgb2hsv } from "../utils";
+import {
+  SVGAttributes,
+  useCallback,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  guideSVValues,
+  hex2Rgb,
+  HSV2RGB,
+  normalizeHSV,
+  rgb2Hex,
+  rgb2hsv,
+} from "../utils";
+
+const VIEWBOX_SIZE = 100;
 
 const DraggableCircle = ({
   x,
@@ -21,6 +38,27 @@ const DraggableCircle = ({
           ? "SaturationBrightnessPlot-circleOutline"
           : "SaturationBrightnessPlot-circle"
       } ${className || ""}`}
+      vectorEffect="non-scaling-stroke"
+      cx={x}
+      cy={y}
+      r={1}
+    />
+  );
+};
+
+const UndraggableCircle = ({
+  x,
+  y,
+  className,
+  ...restProps
+}: {
+  x: number;
+  y: number;
+} & SVGAttributes<SVGCircleElement>) => {
+  return (
+    <circle
+      {...restProps}
+      className="SaturationBrightnessPlot-overlayCircle"
       vectorEffect="non-scaling-stroke"
       cx={x}
       cy={y}
@@ -58,14 +96,15 @@ const Draggable2DSVGPlot = ({
   coords = [],
   updateCoordAtIndex,
   coloredBackgroundHue,
+  additionalIndicators,
 }: {
   xAxisLabel?: string;
   yAxisLabel?: string;
   coords?: XYCoord[];
   updateCoordAtIndex?: (coord: XYCoord, index: number) => void;
   coloredBackgroundHue?: number;
+  additionalIndicators?: XYCoord[];
 }) => {
-  const viewBoxSize = 100;
   const gridColor = "var(--chart-grid)";
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
@@ -83,7 +122,7 @@ const Draggable2DSVGPlot = ({
       x1={t}
       y1={0}
       x2={t}
-      y2={viewBoxSize}
+      y2={VIEWBOX_SIZE}
       strokeWidth={1}
       vectorEffect="non-scaling-stroke"
       style={{ strokeOpacity: coloredBackgroundHue === undefined ? 1 : 0.2 }}
@@ -94,7 +133,7 @@ const Draggable2DSVGPlot = ({
       key={"v" + t}
       x1={0}
       y1={t}
-      x2={viewBoxSize}
+      x2={VIEWBOX_SIZE}
       y2={t}
       strokeWidth={1}
       vectorEffect="non-scaling-stroke"
@@ -143,7 +182,7 @@ const Draggable2DSVGPlot = ({
         y: cursor.y - dragOffset.y,
       };
 
-      const restrainedRect = restrainInViewBox(newRect, viewBoxSize);
+      const restrainedRect = restrainInViewBox(newRect, VIEWBOX_SIZE);
 
       setRect(restrainedRect);
       rectRef.current = restrainedRect;
@@ -192,20 +231,20 @@ const Draggable2DSVGPlot = ({
           </linearGradient>
         </defs>
         <rect
-          width={viewBoxSize}
-          height={viewBoxSize}
+          width={VIEWBOX_SIZE}
+          height={VIEWBOX_SIZE}
           fill={rgb2Hex(HSV2RGB({ h: coloredBackgroundHue / 360, s: 1, v: 1 }))}
           strokeWidth={0}
         />
         <rect
-          width={viewBoxSize}
-          height={viewBoxSize}
+          width={VIEWBOX_SIZE}
+          height={VIEWBOX_SIZE}
           fill="url('#svg-whiteGradient')"
           strokeWidth={0}
         />
         <rect
-          width={viewBoxSize}
-          height={viewBoxSize}
+          width={VIEWBOX_SIZE}
+          height={VIEWBOX_SIZE}
           fill="url('#svg-blackGradient')"
           strokeWidth={0}
         />
@@ -216,15 +255,15 @@ const Draggable2DSVGPlot = ({
     <svg
       ref={svgRef}
       className="SaturationBrightnessPlot-svg"
-      viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+      viewBox={`0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`}
     >
       <g name="grid lines">
         {backgroundGradients}
         {horizontalLines}
         {verticalLines}
         <rect
-          width={viewBoxSize}
-          height={viewBoxSize}
+          width={VIEWBOX_SIZE}
+          height={VIEWBOX_SIZE}
           fill="none"
           vectorEffect="non-scaling-stroke"
           strokeWidth={2}
@@ -248,6 +287,10 @@ const Draggable2DSVGPlot = ({
         </text>
       </g>
 
+      {additionalIndicators?.map((c, i) => {
+        return <UndraggableCircle key={`x${c.x}y${c.y}}`} {...c} />;
+      })}
+
       {coords.map((c, i) => {
         // console.log(indexDragging, rect);
         const coord = indexDraggingRef.current === i ? rect : c;
@@ -267,10 +310,21 @@ const Draggable2DSVGPlot = ({
 export const SaturationBrightnessPlot = ({
   hexCodes,
   onHexCodesChange,
-  hueValue,
+  hueValue, // number
   onHueChange,
 }) => {
   const [showColoredBackground, setShowColoredBackground] = useState(false);
+  const [showConstrastGuide, setShowContrastGuide] = useState(false);
+  const contrastGuideCoords = useMemo(() => {
+    if (showConstrastGuide) {
+      return guideSVValues(hueValue).map(({ s, v }) => ({
+        x: s,
+        y: VIEWBOX_SIZE - v,
+      }));
+    } else {
+      return [];
+    }
+  }, [hueValue, showConstrastGuide]);
   const hsvs = hexCodes
     ?.map(hex2Rgb)
     .map(rgb2hsv)
@@ -329,17 +383,26 @@ export const SaturationBrightnessPlot = ({
   );
   return (
     <div className="SaturationBrightnessPlot-container">
-      <Checkbox
-        label="Colored Background"
-        checked={showColoredBackground}
-        onChange={(_, checked) => setShowColoredBackground(checked)}
-      />
+      <FlexLayout className="SaturationBrightnessPlot-checkboxes">
+        <Checkbox
+          label="Colored Background"
+          checked={showColoredBackground}
+          onChange={(_, checked) => setShowColoredBackground(checked)}
+        />
+
+        <Checkbox
+          label="Contrast Guide"
+          checked={showConstrastGuide}
+          onChange={(_, checked) => setShowContrastGuide(checked)}
+        />
+      </FlexLayout>
       <Draggable2DSVGPlot
         xAxisLabel="Saturation"
         yAxisLabel="Brightness"
-        coords={hsvs.map(({ s, v }) => ({ x: s, y: 100 - v }))}
+        coords={hsvs.map(({ s, v }) => ({ x: s, y: VIEWBOX_SIZE - v }))}
         updateCoordAtIndex={updateCoordAtIndex}
         coloredBackgroundHue={showColoredBackground ? hueValue : undefined}
+        additionalIndicators={contrastGuideCoords}
       />
       <div className="SaturationBrightnessPlot-HueSetter">
         <Slider

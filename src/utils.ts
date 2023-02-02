@@ -102,7 +102,9 @@ export function normalizeHSV({ h, s, v }: HSVValue) {
   return { h: h / 360, s: s / 100, v: v / 100 };
 }
 
-/** 0 <= h, s, v <= 1 */
+/**
+ * 0 <= h, s, v <= 1
+ * @returns 0 <= r,g,b <= 255 */
 export function HSV2RGB({ h, s, v }: HSVValue) {
   if (h < 0 || h > 1) {
     console.error("HSV2RGB invalid 0 <= h <= 1", h);
@@ -154,12 +156,21 @@ export function HSV2String(hsv: HSVValue | null) {
   return `HSV(${h},${s}, ${v})`;
 }
 
+/** 0 <= r,g,b <= 255 */
 function luminance(r, g, b) {
   var a = [r, g, b].map(function (v) {
     v /= 255;
     return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
   });
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+}
+
+function luminanceSimple(r, g, b) {
+  return (
+    0.2126 * Math.pow(r / 255.0, 2.2) +
+    0.7152 * Math.pow(g / 255.0, 2.2) +
+    0.0722 * Math.pow(b / 255.0, 2.2)
+  );
 }
 
 /**
@@ -175,4 +186,35 @@ export function contrast(
   var brightest = Math.max(lum1, lum2);
   var darkest = Math.min(lum1, lum2);
   return (brightest + 0.05) / (darkest + 0.05);
+}
+
+/**
+ * Calculate guide saturation and value pairs given a hue value, so that
+ * the color's contrast ratio against both white and black are above 4.5.
+ * @param hue 0<h<360
+ * @returns 0<s<100, 0<v<100
+ */
+export function guideSVValues(hue: number): { s: number; v: number }[] {
+  // Contrast against white: 1.05/(Y+0.05), so Y < 11/60
+  // Contrast against black: (Y+0.05)/0.05, so Y > 10.5/60
+  // From HSV2RGB, we can deduce, increase of V or decrease of S results increase of Y
+  // So we can start with S = 0, find boundraries of V, then follow the leads to S = 100
+  const values: { s: number; v: number }[] = [];
+
+  for (let s = 0; s <= 100; s++) {
+    for (let v = 0; v <= 100; v++) {
+      const { r, g, b } = HSV2RGB({ h: hue / 360, s: s / 100, v: v / 100 });
+      const y = luminance(r, g, b);
+      // console.log({ s, v, y });
+      if (y < 0.175) {
+        // invalid
+      } else if (y <= 0.18333333) {
+        values.push({ s, v });
+      } else {
+        break;
+      }
+    }
+  }
+
+  return values;
 }
