@@ -51,7 +51,7 @@
 .SaturationBrightnessPlot-container {
   grid-area: plot;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   flex-direction: column;
   padding: var(--salt-size-unit);
   justify-content: center;
@@ -59,7 +59,8 @@
 }
 
 .SaturationBrightnessPlot-checkboxes {
-  width: 270px;
+  min-width: 270px;
+  width: 100%;
 }
 
 .SaturationBrightnessPlot-svg {

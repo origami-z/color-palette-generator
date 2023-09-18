@@ -383,7 +383,10 @@ export const SaturationBrightnessPlot = ({
   );
   return (
     <div className="SaturationBrightnessPlot-container">
-      <FlexLayout className="SaturationBrightnessPlot-checkboxes">
+      <FlexLayout
+        className="SaturationBrightnessPlot-checkboxes"
+        justify="center"
+      >
         <Checkbox
           label="Colored Background"
           checked={showColoredBackground}
