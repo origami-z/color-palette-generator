@@ -4,7 +4,25 @@ function componentToHex(c: number) {
 }
 
 /**
- * Parse `rgb(123, 123, 123)` to `#123123`.
+ * Parse `rgb(123, 123, 123)` to `{r: 123, g: 123, b: 123}`.
+ *
+ * If input is invalid, returns null.
+ */
+export function rgbString2Rgb(rgbString: string) {
+  const m = rgbString.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+  if (m) {
+    return {
+      r: Number.parseInt(m[1]),
+      g: Number.parseInt(m[2]),
+      b: Number.parseInt(m[3]),
+    };
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Parse `rgb(123, 123, 123)` to `#7b7b7b`.
  *
  * If input is invalid, returns `#000000`.
  */
@@ -42,6 +60,8 @@ export interface HSVValue {
   v: number;
 }
 
+const percentRoundFn = (num: number) => Math.round(num * 100) / 100;
+
 /**
  * rgb: 0-255
  * @returns 0<h<360, 0<s<100, 0<v<100
@@ -49,24 +69,12 @@ export interface HSVValue {
 export function rgb2hsv(rgb: { r: number; g: number; b: number } | null) {
   if (rgb === null) return null;
   const { r, g, b } = rgb;
-  let rabs,
-    gabs,
-    babs,
-    rr,
-    gg,
-    bb,
-    h,
-    s,
-    v: number,
-    diff: number,
-    diffc,
-    percentRoundFn;
+  let rabs, gabs, babs, rr, gg, bb, h, s, v: number, diff: number, diffc;
   rabs = r / 255;
   gabs = g / 255;
   babs = b / 255;
   (v = Math.max(rabs, gabs, babs)), (diff = v - Math.min(rabs, gabs, babs));
   diffc = (c) => (v - c) / 6 / diff + 1 / 2;
-  percentRoundFn = (num) => Math.round(num * 100) / 100;
   if (diff == 0) {
     h = s = 0;
   } else {
@@ -90,11 +98,13 @@ export function rgb2hsv(rgb: { r: number; g: number; b: number } | null) {
       h -= 1;
     }
   }
-  return {
+  const hsv = {
     h: Math.round(h * 360),
     s: percentRoundFn(s * 100),
     v: percentRoundFn(v * 100),
   };
+  // console.log({ hsv });
+  return hsv;
 }
 
 /**  normalize h, s, v to 0 <= n <= 1 */
@@ -218,3 +228,36 @@ export function guideSVValues(hue: number): { s: number; v: number }[] {
 
   return values;
 }
+
+export const parseInputTextToHsv = (
+  text: string,
+  showMode: "Hex" | "RGB"
+): { h: number; s: number; v: number }[] => {
+  if (showMode === "Hex") {
+    return (text.match(/\#[a-f0-9]{6}/gi)?.slice() || [])
+      .map(hex2Rgb)
+      .filter((x) => x !== null)
+      .map(rgb2hsv)
+      .filter((x) => x !== null) as {
+      h: number;
+      s: number;
+      v: number;
+    }[];
+  } else if (showMode === "RGB") {
+    const m = text.match(/rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/gi);
+    if (m) {
+      return Array.from(m)
+        .map(rgbString2Rgb)
+        .filter((x) => x !== null)
+        .map(rgb2hsv)
+        .filter((x) => x !== null) as {
+        h: number;
+        s: number;
+        v: number;
+      }[];
+    }
+    return [];
+  } else {
+    return [];
+  }
+};
