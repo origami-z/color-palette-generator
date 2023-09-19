@@ -16,6 +16,7 @@ import {
   rgb2Hex,
   rgb2hsv,
 } from "../utils";
+import { SVValue } from "../types";
 
 const VIEWBOX_SIZE = 100;
 
@@ -308,10 +309,15 @@ const Draggable2DSVGPlot = ({
 };
 
 export const SaturationBrightnessPlot = ({
-  hexCodes,
-  onHexCodesChange,
+  svValues,
+  onSvValuesChange,
   hueValue, // number
   onHueChange,
+}: {
+  svValues: SVValue[];
+  onSvValuesChange: (svValues: SVValue[]) => void;
+  hueValue: number;
+  onHueChange: (hue: number) => void;
 }) => {
   const [showColoredBackground, setShowColoredBackground] = useState(false);
   const [showConstrastGuide, setShowContrastGuide] = useState(false);
@@ -325,62 +331,27 @@ export const SaturationBrightnessPlot = ({
       return [];
     }
   }, [hueValue, showConstrastGuide]);
-  const hsvs = hexCodes
-    ?.map(hex2Rgb)
-    .map(rgb2hsv)
-    .filter((x) => x !== null) as {
-    h: number;
-    s: any;
-    v: any;
-  }[];
   const updateCoordAtIndex = useCallback(
     (coord: XYCoord, index: number) => {
-      // normalizeHSV(colorToUpdate)
       console.log("updateCoordAtIndex", coord, index);
-      const newHexCodes = hexCodes?.map((hex, i) => {
+      const newSvValues = svValues.map((svValue, i) => {
         if (i === index) {
-          const colorToUpdate = normalizeHSV({
-            h: hsvs[index].h,
+          return {
             s: coord.x,
-            v: 100 - coord.y,
-          });
-          if (
-            colorToUpdate.s < 0 ||
-            colorToUpdate.s > 1 ||
-            colorToUpdate.v < 0 ||
-            colorToUpdate.v > 1
-          ) {
-            return hex;
-          } else {
-            console.log({ coord, colorToUpdate, rgb: HSV2RGB(colorToUpdate) });
-            const newHex = rgb2Hex(HSV2RGB(colorToUpdate));
-            return newHex;
-          }
+            v: VIEWBOX_SIZE - coord.y,
+          };
         } else {
-          return hex;
+          return svValue;
         }
       });
-      console.log({ newHexCodes });
-      onHexCodesChange(newHexCodes);
+      // console.log({  newSvValues });
+      onSvValuesChange(newSvValues);
     },
-    [hexCodes]
+    [svValues]
   );
-  const rangeId = useId();
-  const handleSliderChange = useCallback(
-    (newHue) => {
-      onHueChange(newHue);
-      onHexCodesChange(
-        hexCodes.map((hexCode) => {
-          const hsv = rgb2hsv(hex2Rgb(hexCode))!;
-          const newHsv = { ...hsv, h: newHue };
-          const newHex = rgb2Hex(HSV2RGB(normalizeHSV(newHsv)));
-          // console.log({ newHue, newHsv, newHex });
-          return newHex;
-        })
-      );
-    },
-    [hexCodes]
-  );
+  const handleSliderChange = (newHue) => {
+    onHueChange(newHue);
+  };
   return (
     <div className="SaturationBrightnessPlot-container">
       <FlexLayout
@@ -402,7 +373,7 @@ export const SaturationBrightnessPlot = ({
       <Draggable2DSVGPlot
         xAxisLabel="Saturation"
         yAxisLabel="Brightness"
-        coords={hsvs.map(({ s, v }) => ({ x: s, y: VIEWBOX_SIZE - v }))}
+        coords={svValues.map(({ s, v }) => ({ x: s, y: VIEWBOX_SIZE - v }))}
         updateCoordAtIndex={updateCoordAtIndex}
         coloredBackgroundHue={showColoredBackground ? hueValue : undefined}
         additionalIndicators={contrastGuideCoords}
