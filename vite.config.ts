@@ -7,6 +7,7 @@ export default defineConfig({
   base: "/color-palette-generator/",
   // @ts-ignore
   test: {
+    globals: true,
     coverage: {
       // you can include other reporters, but 'json-summary' is required, json is recommended
       reporter: ["text", "json-summary", "json"],

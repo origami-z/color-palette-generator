@@ -163,7 +163,7 @@ export function HSV2RGB({ h, s, v }: HSVValue) {
 export function HSV2String(hsv: HSVValue | null) {
   if (hsv === null) return "";
   const { h, s, v } = hsv;
-  return `HSV(${h},${s}, ${v})`;
+  return `HSV(${h}, ${s}, ${v})`;
 }
 
 /** 0 <= r,g,b <= 255 */
