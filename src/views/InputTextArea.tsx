@@ -19,7 +19,7 @@ export const InputTextArea = ({
 
   return (
     <div className="InputTextArea-container">
-      <label htmlFor={textAreaId}>Color values:</label>
+      <label htmlFor={textAreaId}>Color values</label>
       <br />
       <textarea
         className="InputTextArea-textarea"

@@ -1,14 +1,25 @@
 name: Build
 
-on: push
+on:
+  pull_request:
 
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+
+    permissions:
+      # Required to checkout the code
+      contents: read
+      # Required to put a comment into the pull-request
+      pull-requests: write
+
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
       - run: yarn
-      - run: yarn test
+      - run: yarn test:coverage
+      - name: "Report Coverage"
+        if: always() # Also generate the report if tests are failing
+        uses: davelosert/vitest-coverage-report-action@v2
       - run: yarn build
