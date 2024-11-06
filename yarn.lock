@@ -1843,7 +1843,7 @@ __metadata:
     "@types/react-dom": ^18.0.10
     "@vitejs/plugin-react": ^3.0.0
     "@vitest/coverage-v8": ^0.34.6
-    happy-dom: ^12.1.2
+    happy-dom: ^15.10.2
     jsdom: ^22.1.0
     react: ^18.2.0
     react-color: ^2.19.3
@@ -2502,17 +2502,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^12.1.2":
-  version: 12.1.2
-  resolution: "happy-dom@npm:12.1.2"
+"happy-dom@npm:^15.10.2":
+  version: 15.10.2
+  resolution: "happy-dom@npm:15.10.2"
   dependencies:
-    css.escape: ^1.5.1
     entities: ^4.5.0
-    iconv-lite: ^0.6.3
     webidl-conversions: ^7.0.0
-    whatwg-encoding: ^2.0.0
     whatwg-mimetype: ^3.0.0
-  checksum: aadc2de822338f6bbbf5a2ba10d6b36e59fb389901d309f2ef0b26b9e993f02511f2775b82091fbf724fe9cc9e83d5897b4b5368631654a5fa7a5df083ecad24
+  checksum: 37ef0875565fe94e3fc47c8ddba422268966ffabc4efd84bc79db692d63b28478090e41a58f68b3e66f1b6dc510a9390fc45a1ceb2b64e9cc1a3c66dd088592f
   languageName: node
   linkType: hard
 
@@ -2638,7 +2635,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
+"iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:
