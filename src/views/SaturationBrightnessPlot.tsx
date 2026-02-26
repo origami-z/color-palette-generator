@@ -109,7 +109,6 @@ const Draggable2DSVGPlot = ({
   const gridColor = "var(--chart-grid)";
   const svgRef = useRef<SVGSVGElement | null>(null);
   const indexDraggingRef = useRef(-1);
-  // const [indexDragging, setIndexDragging] = useState(-1);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   // Need `rect` so that SVG would re-render during `mousemove`
   const [rect, setRect] = useState({ x: 0, y: 0 });
@@ -152,7 +151,7 @@ const Draggable2DSVGPlot = ({
     point.x = event.clientX;
     point.y = event.clientY;
     point = point.matrixTransform(svgRef.current.getScreenCTM()?.inverse());
-    console.log("start drag", { x: point.x, y: point.y });
+
     setDragOffset({
       x: point.x - rectRef.current.x,
       y: point.y - rectRef.current.y,
@@ -163,7 +162,6 @@ const Draggable2DSVGPlot = ({
     };
     setRect(newRect);
     rectRef.current = newRect;
-    // setIndexDragging(index);
     indexDraggingRef.current = index;
 
     const mousemove = (event) => {
@@ -187,7 +185,7 @@ const Draggable2DSVGPlot = ({
 
       setRect(restrainedRect);
       rectRef.current = restrainedRect;
-      console.log("mousemove", { restrainedRect });
+
       updateCoordAtIndex?.(
         {
           x: restrainedRect.x,
@@ -205,10 +203,7 @@ const Draggable2DSVGPlot = ({
         },
         indexDraggingRef.current
       );
-      // rectRef.current;
-      // setIndexDragging(-1);
       indexDraggingRef.current = -1;
-      // setRect({ x: 0, y: 0 });
       setDragOffset({ x: 0, y: 0 });
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
@@ -293,7 +288,6 @@ const Draggable2DSVGPlot = ({
       })}
 
       {coords.map((c, i) => {
-        // console.log(indexDragging, rect);
         const coord = indexDraggingRef.current === i ? rect : c;
         return (
           <DraggableCircle
@@ -333,7 +327,7 @@ export const SaturationBrightnessPlot = ({
   }, [hueValue, showConstrastGuide]);
   const updateCoordAtIndex = useCallback(
     (coord: XYCoord, index: number) => {
-      console.log("updateCoordAtIndex", coord, index);
+
       const newSvValues = svValues.map((svValue, i) => {
         if (i === index) {
           return {

@@ -1,5 +1,5 @@
 function componentToHex(c: number) {
-  var hex = c.toString(16);
+  const hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
 
@@ -44,7 +44,7 @@ export function rgb2Hex({ r, g, b }: { r: number; g: number; b: number }) {
 }
 
 export function hex2Rgb(hex: string) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
         r: parseInt(result[1], 16),
@@ -103,7 +103,6 @@ export function rgb2hsv(rgb: { r: number; g: number; b: number } | null) {
     s: percentRoundFn(s * 100),
     v: percentRoundFn(v * 100),
   };
-  // console.log({ hsv });
   return hsv;
 }
 
@@ -125,7 +124,7 @@ export function HSV2RGB({ h, s, v }: HSVValue) {
   if (v < 0 || v > 1) {
     console.error("HSV2RGB invalid 0 <= v <= 1", v);
   }
-  var r, g, b, i, f, p, q, t;
+  let r: number, g: number, b: number, i: number, f: number, p: number, q: number, t: number;
   i = Math.floor(h * 6);
   f = h * 6 - i;
   p = v * (1 - s);
@@ -167,20 +166,12 @@ export function HSV2String(hsv: HSVValue | null) {
 }
 
 /** 0 <= r,g,b <= 255 */
-function luminance(r, g, b) {
-  var a = [r, g, b].map(function (v) {
+function luminance(r: number, g: number, b: number) {
+  const a = [r, g, b].map(function (v) {
     v /= 255;
     return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
   });
   return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
-}
-
-function luminanceSimple(r, g, b) {
-  return (
-    0.2126 * Math.pow(r / 255.0, 2.2) +
-    0.7152 * Math.pow(g / 255.0, 2.2) +
-    0.0722 * Math.pow(b / 255.0, 2.2)
-  );
 }
 
 /**
@@ -191,10 +182,10 @@ export function contrast(
   rgb1: { r: number; g: number; b: number },
   rgb2: { r: number; g: number; b: number }
 ) {
-  var lum1 = luminance(rgb1.r, rgb1.g, rgb1.b);
-  var lum2 = luminance(rgb2.r, rgb2.g, rgb2.b);
-  var brightest = Math.max(lum1, lum2);
-  var darkest = Math.min(lum1, lum2);
+  const lum1 = luminance(rgb1.r, rgb1.g, rgb1.b);
+  const lum2 = luminance(rgb2.r, rgb2.g, rgb2.b);
+  const brightest = Math.max(lum1, lum2);
+  const darkest = Math.min(lum1, lum2);
   return (brightest + 0.05) / (darkest + 0.05);
 }
 
@@ -215,7 +206,6 @@ export function guideSVValues(hue: number): { s: number; v: number }[] {
     for (let v = 0; v <= 100; v++) {
       const { r, g, b } = HSV2RGB({ h: hue / 360, s: s / 100, v: v / 100 });
       const y = luminance(r, g, b);
-      // console.log({ s, v, y });
       if (y < 0.175) {
         // invalid
       } else if (y <= 0.18333333) {
