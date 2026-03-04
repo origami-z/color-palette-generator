@@ -42,10 +42,12 @@ export const InputTextArea = ({
 
       <FormField label="Parse format" labelPlacement="left" fullWidth={false}>
         <Dropdown
-          source={colorFormats as any}
+          source={[...colorFormats]}
           selected={showMode}
           onSelectionChange={(_, item) => {
-            item && setShowMode(item);
+            if (item === "Hex" || item === "RGB") {
+              setShowMode(item);
+            }
           }}
         />
       </FormField>

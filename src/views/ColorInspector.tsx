@@ -6,17 +6,17 @@ import { ColorDisplay } from "./ColorDisplay";
 
 const colorFormats = ["Hex", "HSV"];
 
-export const ColorInpsector = ({ hexCodes }: { hexCodes?: string[] }) => {
+export const ColorInspector = ({ hexCodes }: { hexCodes?: string[] }) => {
   const [showMode, setShowMode] = useState(colorFormats[0]);
   const [showContrast, setShowContrast] = useState(true);
   return (
-    <FlexLayout gap={1} className="ColorInpsector" direction="column">
+    <FlexLayout gap={1} className="ColorInspector" direction="column">
       <FlexItem>
         <FlexLayout gap={1} justify="center">
           <FormField
             label="Show as"
             labelPlacement="left"
-            className="ColorInpsector-preferences-showAs"
+            className="ColorInspector-preferences-showAs"
             fullWidth={false}
           >
             <Dropdown

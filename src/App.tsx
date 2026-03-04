@@ -4,7 +4,7 @@ import { GitHubLink } from "./GitHubLink/GitHubLink";
 import { ThemeSwitchButton } from "./ThemeSwitchButton";
 import { SVValue } from "./types";
 import { HSV2RGB, normalizeHSV, rgb2Hex } from "./utils";
-import { ColorInpsector } from "./views/ColorInspector";
+import { ColorInspector } from "./views/ColorInspector";
 import { ColorPicker } from "./views/ColorPicker";
 import { InputTextArea } from "./views/InputTextArea";
 import { SaturationBrightnessPlot } from "./views/SaturationBrightnessPlot";
@@ -37,7 +37,7 @@ function App() {
           onHueChange={(newHue) => setHueValue(newHue)}
         />
 
-        <ColorInpsector
+        <ColorInspector
           hexCodes={svValues.map(({ s, v }) =>
             rgb2Hex(HSV2RGB(normalizeHSV({ h: hueValue, s, v })))
           )}

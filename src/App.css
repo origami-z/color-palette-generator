@@ -30,7 +30,7 @@
     padding-block-start: 32px;
   }
 
-  .ColorInpsector {
+  .ColorInspector {
     padding-block-start: 32px;
   }
 }
@@ -108,11 +108,11 @@
   align-items: center;
 }
 
-.ColorInpsector {
+.ColorInspector {
   grid-area: inspect;
 }
 
-.ColorInpsector-preferences-showAs {
+.ColorInspector-preferences-showAs {
   width: 130px;
 }
 
